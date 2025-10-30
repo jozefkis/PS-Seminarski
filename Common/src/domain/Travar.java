@@ -90,6 +90,8 @@ public class Travar extends AbstractDomainObject
                     rs.getString("korisnickoIme"), rs.getString("sifra"));
             lista.add(t);
         }
+        rs.close();
+        
         return lista;
     }
 

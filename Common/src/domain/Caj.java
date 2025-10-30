@@ -64,6 +64,8 @@ public class Caj extends AbstractDomainObject
                     rs.getString("opis"));
             lista.add(c);
         }
+        rs.close();
+        
         return lista;
        
     }

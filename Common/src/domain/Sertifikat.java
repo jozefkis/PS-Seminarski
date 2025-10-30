@@ -53,6 +53,7 @@ public class Sertifikat extends AbstractDomainObject
             Sertifikat s = new Sertifikat(rs.getInt("idSertifikat"), rs.getString("naziv"), rs.getString("opis"));
             lista.add(s);
         }
+        rs.close();
         
         return lista;
     }
