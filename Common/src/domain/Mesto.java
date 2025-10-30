@@ -83,7 +83,7 @@ public class Mesto extends AbstractDomainObject
     @Override
     public String vrednostiZaUpdate() 
     {
-        return " naziv = '" + naziv + "' ";
+        return " naziv = '" + naziv + "'";
     }
 
     @Override

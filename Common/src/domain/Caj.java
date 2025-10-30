@@ -79,14 +79,14 @@ public class Caj extends AbstractDomainObject
     @Override
     public String vrednostiZaInsert()
     {
-        return "'" + naziv + "', '" + cena + "', " + 
+        return "'" + naziv + "', " + cena + ", " + 
                 "'" + korisnickoUputstvo + "', " + "'" + opis + "'";
     }
 
     @Override
     public String vrednostiZaUpdate()
     {
-        return " naziv = '" + naziv + "', cena = '" + cena + "', korisnickoUputsvo = " + 
+        return " naziv = '" + naziv + "', cena = " + cena + ", korisnickoUputsvo = " + 
                 "'" + korisnickoUputstvo + "', opis = " + "'" + opis + "'";
     }
 

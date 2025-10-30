@@ -86,15 +86,15 @@ public class Kupac extends AbstractDomainObject
     @Override
     public String vrednostiZaInsert()
     {
-        return "'" + ime + "', '" + prezime + "', " + "'" + telefon + "', '" 
-                 + mesto.getIdMesto() + "'";
+        return "'" + ime + "', '" + prezime + "', " + "'" + telefon + "', " 
+                 + mesto.getIdMesto();
     }
 
     @Override
     public String vrednostiZaUpdate()
     {
         return " ime = '" + ime + "', prezime = '" + prezime + "', telefon = " + 
-                "'" + telefon + "', idMesto = '" + mesto.getIdMesto() + "'";
+                "'" + telefon + "', idMesto = " + mesto.getIdMesto();
     }
 
     @Override
