@@ -74,7 +74,7 @@ DROP TABLE IF EXISTS `racun`;
 
 CREATE TABLE `racun` (
   `idRacun` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `datum` date NOT NULL,
+  `datum` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `ukupanIznos` decimal(15,2) NOT NULL CHECK ('ukupanIznos' > 0),
   `idTravar` bigint(20) unsigned NOT NULL,
   `idKupac` bigint(20) unsigned NOT NULL,
