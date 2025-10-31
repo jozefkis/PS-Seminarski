@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class Travar extends AbstractDomainObject
 {
-    private int idTravar;
+    private long idTravar;
     private String ime;
     private String prezime;
     private String telefon;
@@ -25,7 +25,7 @@ public class Travar extends AbstractDomainObject
     {
     }
 
-    public Travar(int idTravar, String ime, String prezime, String telefon, String username, String password)
+    public Travar(long idTravar, String ime, String prezime, String telefon, String username, String password)
     {
         this.idTravar = idTravar;
         this.ime = ime;
@@ -39,6 +39,13 @@ public class Travar extends AbstractDomainObject
     public String toString()
     {
         return ime + " " + prezime;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 3;
+        return hash;
     }
 
     @Override
@@ -59,6 +66,7 @@ public class Travar extends AbstractDomainObject
         final Travar other = (Travar) obj;
         return this.idTravar == other.idTravar;
     }
+
     
     @Override
     public String nazivTabele()
@@ -85,7 +93,7 @@ public class Travar extends AbstractDomainObject
         
         while(rs.next())
         {
-            Travar t = new Travar(rs.getInt("idTravar"),rs.getString("ime"), 
+            Travar t = new Travar(rs.getLong("idTravar"),rs.getString("ime"), 
                     rs.getString("prezime"), rs.getString("telefon"),
                     rs.getString("korisnickoIme"), rs.getString("sifra"));
             lista.add(t);
@@ -104,8 +112,8 @@ public class Travar extends AbstractDomainObject
     @Override
     public String vrednostiZaInsert()
     {
-         return "'" + ime + "', '" + prezime + "', " + "'" + telefon + "', " 
-                + "'" + username + "', '" + password + "'";
+         return " '" + ime + "', '" + prezime + "', " + "'" + telefon + "', " 
+                + "'" + username + "', '" + password + "' ";
     }
 
     @Override
@@ -113,7 +121,7 @@ public class Travar extends AbstractDomainObject
     {
         return " ime = '" + ime + "', prezime = '" + prezime + "', telefon = " + 
                 "'" + telefon + "', korisnickoIme = " 
-                + "'" + username + "', sifra = '" + password + "'";
+                + "'" + username + "', sifra = '" + password + "' ";
     }
 
     @Override
@@ -128,12 +136,12 @@ public class Travar extends AbstractDomainObject
         return "";
     }
 
-    public int getIdTravar()
+    public long getIdTravar()
     {
         return idTravar;
     }
 
-    public void setIdTravar(int idTravar)
+    public void setIdTravar(long idTravar)
     {
         this.idTravar = idTravar;
     }
@@ -186,6 +194,5 @@ public class Travar extends AbstractDomainObject
     public void setPassword(String password)
     {
         this.password = password;
-    }
-    
+    }    
 }

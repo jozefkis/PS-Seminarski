@@ -14,11 +14,11 @@ import java.util.ArrayList;
  */
 public class Sertifikat extends AbstractDomainObject
 {
-    private int idSertifikat;
+    private long idSertifikat;
     private String naziv;
     private String opis;
 
-    public Sertifikat(int idSertifikat, String naziv, String opis)
+    public Sertifikat(long idSertifikat, String naziv, String opis)
     {
         this.idSertifikat = idSertifikat;
         this.naziv = naziv;
@@ -50,7 +50,7 @@ public class Sertifikat extends AbstractDomainObject
         
         while(rs.next())
         {
-            Sertifikat s = new Sertifikat(rs.getInt("idSertifikat"), rs.getString("naziv"), rs.getString("opis"));
+            Sertifikat s = new Sertifikat(rs.getLong("idSertifikat"), rs.getString("naziv"), rs.getString("opis"));
             lista.add(s);
         }
         rs.close();
@@ -67,13 +67,13 @@ public class Sertifikat extends AbstractDomainObject
     @Override
     public String vrednostiZaInsert()
     {
-        return "'" + naziv + "', '" + opis + "'";
+        return " '" + naziv + "', '" + opis + "' ";
     }
 
     @Override
     public String vrednostiZaUpdate()
     {
-        return " naziv = '" + naziv + "', opis = '" + opis + "'";
+        return " naziv = '" + naziv + "', opis = '" + opis + "' ";
     }
 
     @Override
@@ -88,12 +88,12 @@ public class Sertifikat extends AbstractDomainObject
         return "";
     }
 
-    public int getIdSertifikat()
+    public long getIdSertifikat()
     {
         return idSertifikat;
     }
 
-    public void setIdSertifikat(int idSertifikat)
+    public void setIdSertifikat(long idSertifikat)
     {
         this.idSertifikat = idSertifikat;
     }

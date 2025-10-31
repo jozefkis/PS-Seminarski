@@ -16,14 +16,14 @@ import java.util.ArrayList;
  */
 public class Racun extends AbstractDomainObject
 {
-    private int idRacun;
+    private long idRacun;
     private LocalDateTime datum;
     private double ukupanIznos;
     private Travar travar;
     private Kupac kupac;
     private ArrayList<StavkaRacuna> stavkeRacuna;
 
-    public Racun(int idRacun, LocalDateTime datum, double ukupanIznos, Travar travar, Kupac kupac, ArrayList<StavkaRacuna> stavkeRacuna)
+    public Racun(long idRacun, LocalDateTime datum, double ukupanIznos, Travar travar, Kupac kupac, ArrayList<StavkaRacuna> stavkeRacuna)
     {
         this.idRacun = idRacun;
         this.datum = datum;
@@ -65,16 +65,16 @@ public class Racun extends AbstractDomainObject
         
         while (rs.next())
         {
-            Travar t = new Travar(rs.getInt("idTravar"),rs.getString("t.ime"), 
+            Travar t = new Travar(rs.getLong("idTravar"),rs.getString("t.ime"), 
                     rs.getString("t.prezime"), rs.getString("t.telefon"),
                     rs.getString("korisnickoIme"), rs.getString("sifra"));
             
-            Mesto m  = new Mesto(rs.getInt("idMesto"), rs.getString("m.naziv"));
+            Mesto m  = new Mesto(rs.getLong("idMesto"), rs.getString("m.naziv"));
             
-            Kupac k = new Kupac(rs.getInt("idKupac"), rs.getString("k.ime"), rs.getString("k.prezime"), 
+            Kupac k = new Kupac(rs.getLong("idKupac"), rs.getString("k.ime"), rs.getString("k.prezime"), 
                     rs.getString("k.telefon"), m);
             
-            Racun r = new Racun(rs.getInt("idRacun"), rs.getObject("datum", LocalDateTime.class), 
+            Racun r = new Racun(rs.getLong("idRacun"), rs.getObject("datum", LocalDateTime.class), 
                     rs.getDouble("ukupanIznos"), t, k, null);
             
             lista.add(r);
@@ -93,33 +93,38 @@ public class Racun extends AbstractDomainObject
     @Override
     public String vrednostiZaInsert()
     {
-        return "'" + Timestamp.valueOf(datum);
+        return " '" + Timestamp.valueOf(datum) + "', " + ukupanIznos + ", " + travar.getIdTravar() + ", " + kupac.getIdKupac() + " ";
     }
 
     @Override
     public String vrednostiZaUpdate()
     {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " datum = '" + Timestamp.valueOf(datum) + "', "
+                + "ukupanIznos = " + ukupanIznos + " ";
+
     }
 
     @Override
     public String uslov()
     {
-        return "";
+        return "idRacun = " + idRacun;
     }
 
     @Override
     public String uslovZaSelect()
     {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if(kupac != null){
+            return " WHERE k.idKupac = " + kupac.getIdKupac();
+        }
+        return "";
     }
 
-    public int getIdRacun()
+    public long getIdRacun()
     {
         return idRacun;
     }
 
-    public void setIdRacun(int idRacun)
+    public void setIdRacun(long idRacun)
     {
         this.idRacun = idRacun;
     }

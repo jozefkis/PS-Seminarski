@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public class Mesto extends AbstractDomainObject
 {
-    private int idMesto;
+    private long idMesto;
     private String naziv;
 
     @Override
@@ -24,7 +24,7 @@ public class Mesto extends AbstractDomainObject
         return naziv;
     }
 
-    public Mesto(int idMesto, String naziv) 
+    public Mesto(long idMesto, String naziv) 
     {
         this.idMesto = idMesto;
         this.naziv = naziv;
@@ -60,7 +60,7 @@ public class Mesto extends AbstractDomainObject
 
         while(rs.next()) 
         {
-            Mesto m = new Mesto(rs.getInt("idMesto"),rs.getString("m.naziv"));
+            Mesto m = new Mesto(rs.getLong("idMesto"),rs.getString("m.naziv"));
             lista.add(m);
         }
 
@@ -77,13 +77,13 @@ public class Mesto extends AbstractDomainObject
     @Override
     public String vrednostiZaInsert() 
     {
-        return "'" + naziv + "'";
+        return " '" + naziv + "' ";
     }
 
     @Override
     public String vrednostiZaUpdate() 
     {
-        return " naziv = '" + naziv + "'";
+        return " naziv = '" + naziv + "' ";
     }
 
     @Override
@@ -98,12 +98,12 @@ public class Mesto extends AbstractDomainObject
         return "";
     }
 
-    public int getIdMesto()
+    public long getIdMesto()
     {
         return idMesto;
     }
 
-    public void setIdMesto(int idMesto)
+    public void setIdMesto(long idMesto)
     {
         this.idMesto = idMesto;
     }

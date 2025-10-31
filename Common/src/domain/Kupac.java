@@ -14,13 +14,13 @@ import java.util.ArrayList;
  */
 public class Kupac extends AbstractDomainObject
 {
-    private int idKupac;
+    private long idKupac;
     private String ime;
     private String prezime;
     private String telefon;
     private Mesto mesto;
 
-    public Kupac(int idKupac, String ime, String prezime, String telefon, Mesto mesto)
+    public Kupac(long idKupac, String ime, String prezime, String telefon, Mesto mesto)
     {
         this.idKupac = idKupac;
         this.ime = ime;
@@ -65,9 +65,9 @@ public class Kupac extends AbstractDomainObject
         
         while (rs.next())
         {
-            Mesto m  = new Mesto(rs.getInt("idMesto"), rs.getString("m.naziv"));
+            Mesto m  = new Mesto(rs.getLong("idMesto"), rs.getString("m.naziv"));
             
-            Kupac k = new Kupac(rs.getInt("idKupac"), rs.getString("ime"), rs.getString("prezime"), 
+            Kupac k = new Kupac(rs.getLong("idKupac"), rs.getString("ime"), rs.getString("prezime"), 
                     rs.getString("telefon"), m);
             
             lista.add(k);
@@ -87,14 +87,14 @@ public class Kupac extends AbstractDomainObject
     public String vrednostiZaInsert()
     {
         return "'" + ime + "', '" + prezime + "', " + "'" + telefon + "', " 
-                 + mesto.getIdMesto();
+                 + mesto.getIdMesto() + " ";
     }
 
     @Override
     public String vrednostiZaUpdate()
     {
         return " ime = '" + ime + "', prezime = '" + prezime + "', telefon = " + 
-                "'" + telefon + "', idMesto = " + mesto.getIdMesto();
+                "'" + telefon + "', idMesto = " + mesto.getIdMesto() + " ";
     }
 
     @Override
@@ -109,12 +109,12 @@ public class Kupac extends AbstractDomainObject
         return "";
     }
 
-    public int getIdKupac()
+    public long getIdKupac()
     {
         return idKupac;
     }
 
-    public void setIdKupac(int idKupac)
+    public void setIdKupac(long idKupac)
     {
         this.idKupac = idKupac;
     }

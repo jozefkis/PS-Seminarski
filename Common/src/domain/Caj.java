@@ -14,13 +14,13 @@ import java.util.ArrayList;
  */
 public class Caj extends AbstractDomainObject
 {
-    private int idCaj;
+    private long idCaj;
     private String naziv;
     private double cena;
     private String korisnickoUputstvo;
     private String opis;
 
-    public Caj(int idCaj, String naziv, double cena, String korisnickoUputstvo, String opis)
+    public Caj(long idCaj, String naziv, double cena, String korisnickoUputstvo, String opis)
     {
         this.idCaj = idCaj;
         this.naziv = naziv;
@@ -59,7 +59,7 @@ public class Caj extends AbstractDomainObject
         
         while(rs.next())
         {
-            Caj c = new Caj(rs.getInt("idCaj"),rs.getString("naziv"), 
+            Caj c = new Caj(rs.getLong("idCaj"),rs.getString("naziv"), 
                     rs.getDouble("cena"), rs.getString("korisnickoUputstvo"),
                     rs.getString("opis"));
             lista.add(c);
@@ -80,14 +80,14 @@ public class Caj extends AbstractDomainObject
     public String vrednostiZaInsert()
     {
         return "'" + naziv + "', " + cena + ", " + 
-                "'" + korisnickoUputstvo + "', " + "'" + opis + "'";
+                "'" + korisnickoUputstvo + "', " + "'" + opis + "' ";
     }
 
     @Override
     public String vrednostiZaUpdate()
     {
         return " naziv = '" + naziv + "', cena = " + cena + ", korisnickoUputsvo = " + 
-                "'" + korisnickoUputstvo + "', opis = " + "'" + opis + "'";
+                "'" + korisnickoUputstvo + "', opis = " + "'" + opis + "' ";
     }
 
     @Override
@@ -102,12 +102,12 @@ public class Caj extends AbstractDomainObject
         return "";
     }
 
-    public int getIdCaj()
+    public long getIdCaj()
     {
         return idCaj;
     }
 
-    public void setIdCaj(int idCaj)
+    public void setIdCaj(long idCaj)
     {
         this.idCaj = idCaj;
     }
