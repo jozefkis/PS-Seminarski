@@ -14,18 +14,17 @@ import java.net.Socket;
  */
 public class Receiver 
 {
-    private Socket socket;
+    private final ObjectInputStream ois;
 
-    public Receiver(Socket socket)
+    public Receiver(Socket socket) throws IOException
     {
-        this.socket = socket;
+        ois = new ObjectInputStream(socket.getInputStream());
     }
     
     public Object receive() throws Exception
     {
         try
         {
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             return ois.readObject();
         }
         catch (IOException iOException)

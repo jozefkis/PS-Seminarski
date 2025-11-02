@@ -14,18 +14,17 @@ import java.net.Socket;
  */
 public class Sender 
 {
-    private Socket socket;
+    private final ObjectOutputStream oos;
 
-    public Sender(Socket socket)
+    public Sender(Socket socket) throws IOException
     {
-        this.socket = socket;
+        oos = new ObjectOutputStream(socket.getOutputStream());
     }
     
     public void send(Object obj) throws Exception
     {
         try
         {
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeObject(obj);
             oos.flush();
         }
