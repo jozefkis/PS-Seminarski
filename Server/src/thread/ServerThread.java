@@ -15,23 +15,17 @@ import java.net.Socket;
 public class ServerThread implements Runnable
 {
     private ServerSocket serverSocket;
+    private volatile boolean running = true;
 
-    public ServerThread()
+    public ServerThread() throws IOException
     {
-        try
-        {
-            serverSocket = new ServerSocket(9999);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
+        serverSocket = new ServerSocket(9999);
     }
     
     @Override
     public void run()
     {
-        while (!serverSocket.isClosed())
+        while (running)
         {
             try
             {
@@ -48,15 +42,21 @@ public class ServerThread implements Runnable
             }
         }
     }
-
-    public ServerSocket getServerSocket()
-    {
-        return serverSocket;
-    }
-
-    public void setServerSocket(ServerSocket serverSocket)
-    {
-        this.serverSocket = serverSocket;
-    }
     
+    public void stopServer()
+    {
+        this.running = false;
+        
+        try
+        {
+            if (serverSocket != null && !serverSocket.isClosed())
+            {
+                serverSocket.close();
+            }
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
 }
