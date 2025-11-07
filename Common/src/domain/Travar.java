@@ -7,12 +7,13 @@ package domain;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Yo
  */
-public class Travar extends AbstractDomainObject
+public class Travar implements AbstractDomainObject
 {
     private long idTravar;
     private String ime;
@@ -64,7 +65,7 @@ public class Travar extends AbstractDomainObject
             return false;
         }
         final Travar other = (Travar) obj;
-        return this.idTravar == other.idTravar;
+        return this.username.equals(other.username);
     }
 
     
@@ -87,9 +88,9 @@ public class Travar extends AbstractDomainObject
     }
 
     @Override
-    public ArrayList<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
+    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
     {
-        ArrayList<AbstractDomainObject> lista = new ArrayList<>();
+        List<AbstractDomainObject> lista = new ArrayList<>();
         
         while(rs.next())
         {

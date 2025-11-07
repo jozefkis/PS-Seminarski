@@ -7,13 +7,14 @@ package domain;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 
 /**
  *
  * @author Yo
  */
-public class Mesto extends AbstractDomainObject
+public class Mesto implements AbstractDomainObject
 {
     private long idMesto;
     private String naziv;
@@ -54,9 +55,9 @@ public class Mesto extends AbstractDomainObject
     }
 
     @Override
-    public ArrayList<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException 
+    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException 
     {
-        ArrayList<AbstractDomainObject> lista = new ArrayList<>();
+        List<AbstractDomainObject> lista = new ArrayList<>();
 
         while(rs.next()) 
         {

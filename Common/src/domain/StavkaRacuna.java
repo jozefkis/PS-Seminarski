@@ -8,12 +8,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Yo
  */
-public class StavkaRacuna extends AbstractDomainObject
+public class StavkaRacuna implements AbstractDomainObject
 {
     private Racun racun;
     private int rb;
@@ -61,9 +62,9 @@ public class StavkaRacuna extends AbstractDomainObject
     }
 
     @Override
-    public ArrayList<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
+    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
     {
-        ArrayList<AbstractDomainObject> lista = new ArrayList<>();
+        List<AbstractDomainObject> lista = new ArrayList<>();
         
         while (rs.next())
         {

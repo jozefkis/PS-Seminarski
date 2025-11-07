@@ -9,12 +9,13 @@ import java.sql.SQLException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Yo
  */
-public class TrvS extends AbstractDomainObject
+public class TrvS implements AbstractDomainObject
 {
     private Travar travar;
     private Sertifikat sertifikat;
@@ -53,9 +54,9 @@ public class TrvS extends AbstractDomainObject
     }
 
     @Override
-    public ArrayList<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
+    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
     {
-        ArrayList<AbstractDomainObject> lista = new ArrayList<>();
+        List<AbstractDomainObject> lista = new ArrayList<>();
         
         while(rs.next())
         {

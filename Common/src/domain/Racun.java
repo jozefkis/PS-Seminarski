@@ -9,19 +9,20 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Yo
  */
-public class Racun extends AbstractDomainObject
+public class Racun implements AbstractDomainObject
 {
     private long idRacun;
     private LocalDateTime datum;
     private double ukupanIznos;
     private Travar travar;
     private Kupac kupac;
-    private ArrayList<StavkaRacuna> stavkeRacuna;
+    private List<StavkaRacuna> stavkeRacuna;
 
     public Racun(long idRacun, LocalDateTime datum, double ukupanIznos, Travar travar, Kupac kupac, ArrayList<StavkaRacuna> stavkeRacuna)
     {
@@ -59,9 +60,9 @@ public class Racun extends AbstractDomainObject
     }
 
     @Override
-    public ArrayList<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
+    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
     {
-        ArrayList<AbstractDomainObject> lista = new ArrayList<>();
+        List<AbstractDomainObject> lista = new ArrayList<>();
         
         while (rs.next())
         {
@@ -169,7 +170,7 @@ public class Racun extends AbstractDomainObject
         this.kupac = kupac;
     }
 
-    public ArrayList<StavkaRacuna> getStavkeRacuna()
+    public List<StavkaRacuna> getStavkeRacuna()
     {
         return stavkeRacuna;
     }
@@ -177,5 +178,17 @@ public class Racun extends AbstractDomainObject
     public void setStavkeRacuna(ArrayList<StavkaRacuna> stavkeRacuna)
     {
         this.stavkeRacuna = stavkeRacuna;
+    }
+    
+    public void dodajStavku(StavkaRacuna stavka)
+    {
+        stavkeRacuna.add(stavka);
+        ukupanIznos += stavka.getIznos();
+    }
+    
+    public void izbaciStavku(StavkaRacuna stavka)
+    {
+        stavkeRacuna.remove(stavka);
+        ukupanIznos -= stavka.getIznos();
     }
 }

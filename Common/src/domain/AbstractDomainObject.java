@@ -5,23 +5,23 @@
 package domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
  * @author Yo
  */
-public abstract class AbstractDomainObject implements Serializable
+public interface AbstractDomainObject extends Serializable
 {
-    public abstract String nazivTabele();
-    public abstract String alijas();
-    public abstract String join();
-    public abstract ArrayList<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException;
-    public abstract String koloneZaInsert();
-    public abstract String vrednostiZaInsert();
-    public abstract String vrednostiZaUpdate();
-    public abstract String uslov();
-    public abstract String uslovZaSelect();
+    public String nazivTabele();
+    public String alijas();
+    public String join();
+    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException;
+    public String koloneZaInsert();
+    public String vrednostiZaInsert();
+    public String vrednostiZaUpdate();
+    public String uslov();
+    public String uslovZaSelect();
 }
