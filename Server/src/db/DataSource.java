@@ -38,7 +38,7 @@ public class DataSource
         return hikariDataSource.getConnection();
     }
     
-    public void close()
+    public void closePool()
     {
         if (hikariDataSource != null && !hikariDataSource.isClosed())
             hikariDataSource.close();

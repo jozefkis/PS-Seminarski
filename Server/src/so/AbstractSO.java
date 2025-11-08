@@ -4,9 +4,10 @@
  */
 package so;
 
-import db.DBBroker;
+import db.DataSource;
 import domain.AbstractDomainObject;
 import java.sql.SQLException;
+import java.sql.Connection;
 
 /**
  *
@@ -15,14 +16,19 @@ import java.sql.SQLException;
 public abstract class AbstractSO
 {
     protected abstract void validate(AbstractDomainObject ado) throws Exception;
-    protected abstract void execute(AbstractDomainObject ado) throws Exception;
+    protected abstract void execute(AbstractDomainObject ado, Connection connection) throws Exception;
+    
+    private Connection connection;
 
     public void templateExecute(AbstractDomainObject ado) throws Exception 
     {
+        connection = DataSource.getInstance().getConnection();
+        connection.setAutoCommit(false);
+
         try 
         {
             validate(ado);
-            execute(ado);
+            execute(ado, connection);
             commit();
         }
         catch (Exception e) 
@@ -30,16 +36,40 @@ public abstract class AbstractSO
             rollback();
             throw e;
         }
+        finally
+        {
+            closeConection();
+        }
     }
 
     public void commit() throws SQLException 
     {
-        DBBroker.getInstance().getConnection().commit();
+        if (connection != null)
+        {
+            connection.commit();
+            System.out.println("Transaction COMMITED.");
+        }
     }
 
-    public void rollback() throws SQLException 
+    public void rollback()
     {
-        DBBroker.getInstance().getConnection().rollback();
+        if (connection != null)
+        {
+            try 
+            {
+                connection.rollback();
+                System.err.println("Transaction ROLLBACKED.");
+            }
+            catch (SQLException ex) 
+            {
+                System.err.println("ROLLBACK ERROR: " + ex.getMessage());
+            }
+        }   
     }
-
+    
+    public void closeConection() throws SQLException
+    {
+        if (connection != null && !connection.isClosed())
+            connection.close();
+    }
 }

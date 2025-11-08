@@ -6,6 +6,7 @@ package controller;
 
 import domain.Travar;
 import java.util.ArrayList;
+import java.util.List;
 import so.login.SOLogin;
 
 /**
@@ -15,7 +16,7 @@ import so.login.SOLogin;
 public class ServerController
 {
     private static ServerController instance;
-    private ArrayList<Travar> ulogovaniTravari = new ArrayList<>();
+    private List<Travar> ulogovaniTravari = new ArrayList<>();
 
     private ServerController() 
     {
@@ -35,5 +36,15 @@ public class ServerController
         SOLogin so = new SOLogin();
         so.templateExecute(travar);
         return so.getUlogovani();
+    }
+
+    public List<Travar> getUlogovaniTravari()
+    {
+        return ulogovaniTravari;
+    }
+
+    public void setUlogovaniTravari(List<Travar> ulogovaniTravari)
+    {
+        this.ulogovaniTravari = ulogovaniTravari;
     }
 }
