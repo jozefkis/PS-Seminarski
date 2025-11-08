@@ -5,15 +5,12 @@
 package db;
 
 import domain.AbstractDomainObject;
-import java.io.FileInputStream;
-import java.util.Properties;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -23,31 +20,10 @@ import java.util.ArrayList;
 public class DBBroker
 {
     private static DBBroker instance;
-    private Connection connection;
 
     private DBBroker() 
     {
-        try 
-        {
-            Properties properties = new Properties();
-            properties.load(new FileInputStream("dbconfig.properties"));
-            
-            String url = properties.getProperty("url");
-            String username = properties.getProperty("username");
-            String password = properties.getProperty("password");
-            
-            connection = DriverManager.getConnection(url, username, password);
-            connection.setAutoCommit(false);
-        } 
-        catch (Exception ex) 
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    public Connection getConnection() 
-    {
-        return connection;
+       
     }
 
     public static DBBroker getInstance() 
@@ -58,7 +34,7 @@ public class DBBroker
         return instance;
     }
 
-    public ArrayList<AbstractDomainObject> select(AbstractDomainObject ado) throws SQLException 
+    public List<AbstractDomainObject> select(AbstractDomainObject ado, Connection connection) throws SQLException 
     {
         String upit = "SELECT * FROM " + ado.nazivTabele() + " " + ado.alijas()
                 + " " + ado.join() + " " + ado.uslovZaSelect();
@@ -70,7 +46,7 @@ public class DBBroker
         return ado.vratiListu(rs);
     }
 
-    public PreparedStatement insert(AbstractDomainObject ado) throws SQLException 
+    public PreparedStatement insert(AbstractDomainObject ado, Connection connection) throws SQLException 
     {
         String naredba = "INSERT INTO " + ado.nazivTabele() + " "
                 + ado.koloneZaInsert() + " VALUES(" + ado.vrednostiZaInsert() + ")";
@@ -82,7 +58,7 @@ public class DBBroker
         return ps;
     }
 
-    public void update(AbstractDomainObject ado) throws SQLException 
+    public void update(AbstractDomainObject ado, Connection connection) throws SQLException 
     {
         String naredba = "UPDATE " + ado.nazivTabele() + " SET "
                 + ado.vrednostiZaUpdate() + " WHERE " + ado.uslov();
@@ -92,7 +68,7 @@ public class DBBroker
         s.executeUpdate(naredba);
     }
 
-    public void delete(AbstractDomainObject ado) throws SQLException 
+    public void delete(AbstractDomainObject ado, Connection connection) throws SQLException 
     {
         String naredba = "DELETE FROM " + ado.nazivTabele() + " WHERE " + ado.uslov();
         System.out.println(naredba);

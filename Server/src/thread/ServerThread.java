@@ -38,7 +38,10 @@ public class ServerThread implements Runnable
             }
             catch (IOException ex)
             {
-                ex.printStackTrace();
+                if (!running)
+                    System.out.println("Server shutting down...");
+                else
+                    ex.printStackTrace();
             }
         }
     }
