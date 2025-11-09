@@ -8,6 +8,8 @@ import communication.Receiver;
 import communication.Request;
 import communication.Response;
 import communication.Sender;
+import controller.ServerController;
+import domain.Travar;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -17,7 +19,8 @@ import java.net.Socket;
  */
 public class ClientThread implements Runnable
 {
-    Socket socket;
+    private Socket socket;
+    private volatile boolean logoutRequested = false;
 
     public ClientThread(Socket socket)
     {
@@ -33,7 +36,7 @@ public class ClientThread implements Runnable
             Receiver receiver = new Receiver(socket);
             Sender sender = new Sender(socket);
             
-            while (!socket.isClosed())
+            while (!socket.isClosed() && !logoutRequested)
             {
                 Request req = (Request) receiver.receive();
                 Response res = handleRequest(req);
@@ -69,16 +72,19 @@ public class ClientThread implements Runnable
             switch (req.getOperation())
             {
                 case LOGIN:
-                    // uradi ovde handle
+                    Travar travar = ServerController.getInstance().login((Travar) req.getArgument());
+                    response.setResult(travar);
                     break;
                 case LOGOUT:
-                    // -||-
+                    Travar t = ServerController.getInstance().logout((Travar) req.getArgument());
+                    logoutRequested = true;
+                    response.setResult(t);
                     break;
             }
         }
         catch (Exception e)
         {
-            response.setEx(e);
+            response.setException(e);
         }
         
         return response;

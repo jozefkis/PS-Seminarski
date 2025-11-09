@@ -47,7 +47,7 @@ public abstract class AbstractSO
         if (connection != null)
         {
             connection.commit();
-            System.out.println("Transaction COMMITED.");
+            System.out.println("Transaction COMMITED.\n");
         }
     }
 
@@ -58,7 +58,7 @@ public abstract class AbstractSO
             try 
             {
                 connection.rollback();
-                System.err.println("Transaction ROLLBACKED.");
+                System.err.println("Transaction ROLLBACKED.\n");
             }
             catch (SQLException ex) 
             {

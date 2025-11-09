@@ -8,6 +8,7 @@ import domain.Travar;
 import java.util.ArrayList;
 import java.util.List;
 import so.login.SOLogin;
+import so.logout.SOLogout;
 
 /**
  *
@@ -36,6 +37,13 @@ public class ServerController
         SOLogin so = new SOLogin();
         so.templateExecute(travar);
         return so.getUlogovani();
+    }
+    
+    public Travar logout(Travar travar) throws Exception
+    {
+        SOLogout so = new SOLogout();
+        so.templateExecute(travar);
+        return so.getZaOdjavu();
     }
 
     public List<Travar> getUlogovaniTravari()
