@@ -169,7 +169,7 @@ public class DBConfiguration extends javax.swing.JDialog
 
     private void tfPortActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_tfPortActionPerformed
     {//GEN-HEADEREND:event_tfPortActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_tfPortActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSaveActionPerformed
@@ -206,14 +206,18 @@ public class DBConfiguration extends javax.swing.JDialog
         }
         
         Properties prop = new Properties();
-        prop.setProperty("db.url", "jdbc:mysql://localhost:"+ port + "/" + dbName);
-        prop.setProperty("db.username", username);
-        prop.setProperty("db.password", pw);
+        prop.setProperty("jdbcUrl", "jdbc:mysql://localhost:"+ port + "/" + dbName);
+        prop.setProperty("username", username);
+        prop.setProperty("password", pw);
+        
+        prop.setProperty("autoCommit", "false");
+        prop.setProperty("maximumPoolSize", "10");
+        prop.setProperty("minimumIdle", "3");
         
         OutputStream output;
         try
         {
-            output = new FileOutputStream("dbconfig.properties");
+            output = new FileOutputStream("hikari.properties");
             prop.store(output, "Updateted Config");
             
             JOptionPane.showMessageDialog(this, "Configuration saved.");
@@ -250,10 +254,10 @@ public class DBConfiguration extends javax.swing.JDialog
         try
         {
             Properties properties = new Properties();
-            properties.load(new FileInputStream("dbconfig.properties"));
-            String url = properties.getProperty("db.url");
-            String username = properties.getProperty("db.username");
-            String password = properties.getProperty("db.password");
+            properties.load(new FileInputStream("hikari.properties"));
+            String url = properties.getProperty("jdbcUrl");
+            String username = properties.getProperty("username");
+            String password = properties.getProperty("password");
             
             tfPort.setText(url.substring(23, 27));
             tfDBName.setText(url.substring(28));

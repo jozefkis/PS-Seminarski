@@ -14,7 +14,7 @@ import java.net.Socket;
  */
 public class ServerThread implements Runnable
 {
-    private ServerSocket serverSocket;
+    private final ServerSocket serverSocket;
     private volatile boolean running = true;
 
     public ServerThread() throws IOException
@@ -44,6 +44,7 @@ public class ServerThread implements Runnable
                     ex.printStackTrace();
             }
         }
+        System.out.println("Server is down.\n");
     }
     
     public void stopServer()

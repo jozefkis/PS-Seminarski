@@ -4,9 +4,11 @@
  */
 package so.login;
 import controller.ServerController;
+import db.DBBroker;
 import domain.AbstractDomainObject;
 import domain.Travar;
 import java.sql.Connection;
+import java.util.List;
 import so.AbstractSO;
 
 /**
@@ -23,21 +25,35 @@ public class SOLogin extends AbstractSO
     {
         if (ado == null || !(ado instanceof Travar))
             throw new Exception("Poslat neodgovarajuci objekat!");
-        
-        Travar travar = (Travar) ado;
-        
-        for (Travar t: ServerController.getInstance().getUlogovaniTravari())
-        {
-            if (t.equals(travar))
-                throw new Exception("Taj travar je vec ulogovan!");
-        }
-            
+                  
     }
 
     @Override
     protected void execute(AbstractDomainObject ado, Connection connection) throws Exception
     {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Travar travar = (Travar) ado;
+        List<Travar> all = (List<Travar>) (List<?>) DBBroker.getInstance().select(travar, connection);
+        
+        for (Travar t: all)
+        {
+            if (t.getUsername().equals(travar.getUsername()) && t.getPassword().equals(travar.getPassword()))
+            {
+                ulogovani = t;
+                
+                synchronized (ServerController.getInstance().getUlogovaniTravari())
+                {
+                    if (ServerController.getInstance().getUlogovaniTravari().contains(ulogovani)) 
+                    {
+                        throw new Exception("Travar je vec ulogovan!"); 
+                    }
+            
+                    ServerController.getInstance().getUlogovaniTravari().add(ulogovani);
+                }
+                return;
+            }
+        }
+        
+        throw new Exception("Ne postoji travar sa tim kredencijalima.");
     }
 
     public Travar getUlogovani()
@@ -49,7 +65,4 @@ public class SOLogin extends AbstractSO
     {
         this.ulogovani = ulogovani;
     }
-    
-    
-
 }
