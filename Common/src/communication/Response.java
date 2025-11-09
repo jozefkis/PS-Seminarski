@@ -4,18 +4,20 @@
  */
 package communication;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Yo
  */
-public class Response
+public class Response implements Serializable
 {
-    private Exception ex;
+    private Exception exception;
     private Object result;
 
     public Response(Exception ex, Object result)
     {
-        this.ex = ex;
+        this.exception = ex;
         this.result = result;
     }
 
@@ -23,14 +25,14 @@ public class Response
     {
     }
 
-    public Exception getEx()
+    public Exception getException()
     {
-        return ex;
+        return exception;
     }
 
-    public void setEx(Exception ex)
+    public void setException(Exception exception)
     {
-        this.ex = ex;
+        this.exception = exception;
     }
 
     public Object getResult()
