@@ -1,6 +1,9 @@
-/Common/build/
 /Server/nbproject/private/
-/Common/dist/
-/Server/build/
 /Client/nbproject/private/
 /Common/nbproject/private/
+
+
+/Common/dist/
+/Server/build/
+/Client/build/
+/Common/build/
