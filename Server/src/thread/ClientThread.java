@@ -39,6 +39,7 @@ public class ClientThread implements Runnable
             while (!socket.isClosed() && !logoutRequested)
             {
                 Request req = (Request) receiver.receive();
+                System.out.println("\nStigao je zahtev za operaciju: " + req.getOperation() + "\n");
                 Response res = handleRequest(req);
                 sender.send(res);
             }
@@ -80,6 +81,13 @@ public class ClientThread implements Runnable
                     logoutRequested = true;
                     response.setResult(t);
                     break;
+                case GET_ALL_TRAVAR:
+                    response.setResult(ServerController.getInstance().getAllTravar());
+                    break;
+                case TEST:
+                    response.setResult("ODGOVOR USPESAN");
+                    break;
+                    
             }
         }
         catch (Exception e)
