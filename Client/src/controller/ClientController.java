@@ -9,9 +9,11 @@ import communication.Receiver;
 import communication.Request;
 import communication.Response;
 import communication.Sender;
+import domain.Caj;
 import domain.Travar;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 
 /**
  *
@@ -83,6 +85,37 @@ public class ClientController
             throw res.getException();
         }
     }
+    
+    public List<Travar> getAllTravar() throws Exception
+    {
+        Request req = new Request(Operation.GET_ALL_TRAVAR, null);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+        {
+            return (List<Travar>) res.getResult();
+        }
+        else
+        {
+            throw res.getException();
+        }
+    }
+    
+    public List<Caj> getAllCaj() throws Exception
+    {
+        //TO-DO
+        return null;
+    }
+    
+    public void sendTesetRequest() throws Exception
+    {
+        Request req = new Request(Operation.TEST, null);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        System.out.println(res.getResult());
+      
+    }
 
     public void closeConnection()
     {
@@ -99,6 +132,5 @@ public class ClientController
         {
             ex.printStackTrace();
         }
-
     }
 }
