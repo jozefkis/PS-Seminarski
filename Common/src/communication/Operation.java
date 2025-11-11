@@ -11,5 +11,17 @@ package communication;
 public enum Operation
 {
     LOGIN,
-    LOGOUT;
+    LOGOUT,
+    
+    GET_ALL_TRAVAR,
+    
+    
+    
+    GET_ALL_CAJ,
+    
+    
+    GET_ALL_KUPAC,
+    
+    
+    TEST;
 }
