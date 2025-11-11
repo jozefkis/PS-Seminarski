@@ -39,7 +39,7 @@ public class Travar implements AbstractDomainObject
     @Override
     public String toString()
     {
-        return ime + " " + prezime;
+        return ime + " " + prezime + " (@" + username + ")";
     }
 
     @Override
