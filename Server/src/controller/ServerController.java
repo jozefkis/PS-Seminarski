@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import so.login.SOLogin;
 import so.logout.SOLogout;
+import so.travar.SOGetAllTravar;
 
 /**
  *
@@ -44,6 +45,13 @@ public class ServerController
         SOLogout so = new SOLogout();
         so.templateExecute(travar);
         return so.getZaOdjavu();
+    }
+    
+    public List<Travar> getAllTravar() throws Exception
+    {
+        SOGetAllTravar so = new SOGetAllTravar();
+        so.templateExecute(new Travar());
+        return so.getAll();
     }
 
     public List<Travar> getUlogovaniTravari()
