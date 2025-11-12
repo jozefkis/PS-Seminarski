@@ -87,6 +87,12 @@ public class ClientThread implements Runnable
                 case TEST:
                     response.setResult("ODGOVOR USPESAN");
                     break;
+                case GET_ALL_KUPAC:
+                    response.setResult(ServerController.getInstance().getAllKupac());
+                    break;
+                case GET_ALL_CAJ:
+                    response.setResult(ServerController.getInstance().getAllCaj());
+                    break;
                     
             }
         }

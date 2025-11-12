@@ -5,12 +5,15 @@
 package forms;
 
 import controller.ClientController;
+import domain.Caj;
+import domain.Kupac;
 import domain.Travar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -18,7 +21,9 @@ import javax.swing.JOptionPane;
  */
 public class MainForm extends javax.swing.JFrame
 {
+
     Travar ulogovani;
+
     /**
      * Creates new form MainForm
      */
@@ -29,7 +34,11 @@ public class MainForm extends javax.swing.JFrame
         lblTest.setText(ulogovani.getIme() + " " + ulogovani.getPrezime());
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setTitle("Glavna klijentska forma");
         populateTravarCombo();
+        populateKupacCombo();
+        populateCajCombo();
+        setVisible(true);
     }
 
     /**
@@ -44,24 +53,28 @@ public class MainForm extends javax.swing.JFrame
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblStavke = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        comboCajevi = new javax.swing.JComboBox();
+        jLabel5 = new javax.swing.JLabel();
+        spnrKolicina = new javax.swing.JSpinner();
+        btnIzbrisiStavku = new javax.swing.JButton();
+        btnDodajStavku = new javax.swing.JButton();
         comboTravari = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        comboKupci = new javax.swing.JComboBox();
         tfUkupanIznos = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        spnrKolicina = new javax.swing.JSpinner();
-        comboCajevi = new javax.swing.JComboBox();
         btnSacuvajRacun = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        btnDodajStavku = new javax.swing.JButton();
-        btnIzbrisiStavku = new javax.swing.JButton();
+        comboKupci = new javax.swing.JComboBox();
         lblTest = new javax.swing.JLabel();
         btnSndTest = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -77,15 +90,74 @@ public class MainForm extends javax.swing.JFrame
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Stavke računa"));
 
+        tblStavke.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String []
+            {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblStavke.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jScrollPane1.setViewportView(tblStavke);
+
+        jLabel4.setText("Čaj");
+
+        jLabel5.setText("Količina");
+
+        spnrKolicina.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+
+        btnIzbrisiStavku.setText("Izbrisi stavku");
+
+        btnDodajStavku.setText("Dodaj stavku");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(155, 155, 155)
+                        .addComponent(btnIzbrisiStavku)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDodajStavku))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboCajevi, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spnrKolicina, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 176, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(comboCajevi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(spnrKolicina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnIzbrisiStavku)
+                    .addComponent(btnDodajStavku))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jLabel1.setText("Travar");
@@ -96,58 +168,29 @@ public class MainForm extends javax.swing.JFrame
 
         jLabel3.setText("Ukupan iznos (RSD)");
 
-        spnrKolicina.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
-
         btnSacuvajRacun.setText("Sačuvaj račun");
-
-        jLabel4.setText("Caj");
-
-        jLabel5.setText("Količina");
-
-        btnDodajStavku.setText("Dodaj stavku");
-
-        btnIzbrisiStavku.setText("Izbrisi stavku");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(133, 133, 133)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(comboTravari, 0, 211, Short.MAX_VALUE)
-                    .addComponent(comboKupci, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tfUkupanIznos, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(207, 207, 207)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnSacuvajRacun)
-                        .addGap(240, 240, 240))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(24, 24, 24)
-                        .addComponent(comboCajevi, 0, 126, Short.MAX_VALUE)
-                        .addGap(41, 41, 41)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spnrKolicina, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(186, 186, 186))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnIzbrisiStavku)
-                .addGap(18, 18, 18)
-                .addComponent(btnDodajStavku)
-                .addGap(267, 267, 267))
+                .addGap(41, 41, 41)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnSacuvajRacun)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel1))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(comboTravari, 0, 211, Short.MAX_VALUE)
+                                .addComponent(tfUkupanIznos, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(comboKupci, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,21 +207,11 @@ public class MainForm extends javax.swing.JFrame
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfUkupanIznos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(spnrKolicina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboCajevi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDodajStavku)
-                    .addComponent(btnIzbrisiStavku))
-                .addGap(3, 3, 3)
+                .addGap(38, 38, 38)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSacuvajRacun)
-                .addContainerGap())
+                .addGap(7, 7, 7))
         );
 
         lblTest.setText("jLabel1");
@@ -196,6 +229,20 @@ public class MainForm extends javax.swing.JFrame
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Kupac");
+
+        jMenuItem1.setText("Novi kupac");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem1);
+
+        jMenuItem2.setText("Pretraga kupaca");
+        jMenu2.add(jMenuItem2);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Čaj");
@@ -212,9 +259,9 @@ public class MainForm extends javax.swing.JFrame
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(335, 335, 335)
                 .addComponent(lblTest)
-                .addGap(164, 164, 164)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSndTest)
                 .addGap(74, 74, 74))
         );
@@ -239,14 +286,14 @@ public class MainForm extends javax.swing.JFrame
         {
             Travar t = ClientController.getInstance().logout(ulogovani);
             JOptionPane.showMessageDialog(this, "Bye, " + t.toString(), "Logout", JOptionPane.INFORMATION_MESSAGE);
-            
+
             new LoginForm().setVisible(true);
             this.dispose();
-            
+
         }
         catch (Exception ex)
         {
-            JOptionPane.showMessageDialog(this, "Logout unsucessful!\n"+ex.getMessage(), "Logout error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Logout unsucessful!\n" + ex.getMessage(), "Logout error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_formWindowClosing
 
@@ -262,6 +309,12 @@ public class MainForm extends javax.swing.JFrame
             ex.printStackTrace();
         }
     }//GEN-LAST:event_btnSndTestActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
+        new NoviKupacDijalog(this, true);
+
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDodajStavku;
@@ -280,20 +333,23 @@ public class MainForm extends javax.swing.JFrame
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTest;
     private javax.swing.JSpinner spnrKolicina;
+    private javax.swing.JTable tblStavke;
     private javax.swing.JTextField tfUkupanIznos;
     // End of variables declaration//GEN-END:variables
-
 
     private void populateTravarCombo()
     {
         try
         {
             List<Travar> all = ClientController.getInstance().getAllTravar();
-            
+
             comboTravari.removeAllItems();
             comboTravari.setModel(new DefaultComboBoxModel(all.toArray()));
             comboTravari.setSelectedItem(ulogovani);
@@ -301,6 +357,50 @@ public class MainForm extends javax.swing.JFrame
         catch (Exception ex)
         {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void populateKupacCombo()
+    {
+        try
+        {
+            List<Kupac> all = ClientController.getInstance().getAllKupac();
+
+            comboKupci.removeAllItems();
+
+            SwingUtilities.invokeLater(() ->
+            {
+                comboKupci.setModel(new DefaultComboBoxModel(all.toArray()));
+                comboKupci.setSelectedIndex(-1);
+                comboKupci.repaint();
+            });
+
+        }
+        catch (Exception e)
+        {
+            System.out.println("comboKupci error");
+            System.out.println(e.getMessage());
+
+        }
+    }
+
+    private void populateCajCombo()
+    {
+        try
+        {
+            List<Caj> all = ClientController.getInstance().getAllCaj();
+
+            SwingUtilities.invokeLater(() ->
+            {
+                comboCajevi.setModel(new DefaultComboBoxModel(all.toArray()));
+                comboCajevi.setSelectedIndex(-1);
+                comboCajevi.repaint();
+            });
+        }
+        catch (Exception e)
+        {
+            System.out.println("comboCaj error");
+            System.out.println(e.getMessage());
         }
     }
 }

@@ -4,10 +4,14 @@
  */
 package controller;
 
+import domain.Caj;
+import domain.Kupac;
 import domain.Travar;
 import java.util.ArrayList;
 import java.util.List;
+import so.kupac.SOGetAllKupac;
 import so.login.SOLogin;
+import so.caj.SOGetAllCaj;
 import so.logout.SOLogout;
 import so.travar.SOGetAllTravar;
 
@@ -51,6 +55,20 @@ public class ServerController
     {
         SOGetAllTravar so = new SOGetAllTravar();
         so.templateExecute(new Travar());
+        return so.getAll();
+    }
+    
+    public List<Kupac> getAllKupac() throws Exception
+    {
+        SOGetAllKupac so = new SOGetAllKupac();
+        so.templateExecute(new Kupac());
+        return so.getAll();
+    }
+    
+    public List<Caj> getAllCaj() throws Exception
+    {
+        SOGetAllCaj so = new SOGetAllCaj();
+        so.templateExecute(new Caj());
         return so.getAll();
     }
 

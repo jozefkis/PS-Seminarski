@@ -30,6 +30,14 @@ public class Kupac implements AbstractDomainObject
         this.mesto = mesto;
     }
 
+    public Kupac(String ime, String prezime, String telefon, Mesto mesto)
+    {
+        this.ime = ime;
+        this.prezime = prezime;
+        this.telefon = telefon;
+        this.mesto = mesto;
+    }
+
     public Kupac()
     {
     }
@@ -37,7 +45,7 @@ public class Kupac implements AbstractDomainObject
     @Override
     public String toString()
     {
-        return ime + prezime + " (Telefon: " + telefon + ")";
+        return ime + " " + prezime + " (Telefon: " + telefon + ")";
     }
     
     

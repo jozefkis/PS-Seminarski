@@ -4,27 +4,40 @@
  */
 package so.caj;
 
+import db.DBBroker;
 import domain.AbstractDomainObject;
+import domain.Caj;
 import java.sql.Connection;
+import java.util.List;
 import so.AbstractSO;
 
 /**
  *
  * @author Yo
  */
-public class SoGetAllCaj extends AbstractSO
+public class SOGetAllCaj extends AbstractSO
 {
 
+    private List<Caj> all;
+    
     @Override
     protected void validate(AbstractDomainObject ado) throws Exception
     {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (!(ado instanceof Caj))
+            throw new Exception("Prosledjeni objekat nije instanca klase Caj!");
     }
 
     @Override
     protected void execute(AbstractDomainObject ado, Connection connection) throws Exception
     {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Caj c = (Caj) ado;
+        
+        all = (List<Caj>) (List<?>) DBBroker.getInstance().select(c, connection);
+    }
+
+    public List<Caj> getAll()
+    {
+        return all;
     }
     
 }

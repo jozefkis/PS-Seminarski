@@ -10,6 +10,7 @@ import communication.Request;
 import communication.Response;
 import communication.Sender;
 import domain.Caj;
+import domain.Kupac;
 import domain.Travar;
 import java.io.IOException;
 import java.net.Socket;
@@ -93,19 +94,34 @@ public class ClientController
         Response res = (Response) receiver.receive();
         
         if (res.getException() == null)
-        {
             return (List<Travar>) res.getResult();
-        }
         else
-        {
             throw res.getException();
-        }
+        
     }
     
     public List<Caj> getAllCaj() throws Exception
     {
-        //TO-DO
-        return null;
+        Request req = new Request(Operation.GET_ALL_CAJ, null);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return (List<Caj>) res.getResult();
+        else
+            throw res.getException();
+    }
+    
+    public List<Kupac> getAllKupac() throws Exception
+    {
+        Request req = new Request(Operation.GET_ALL_KUPAC, null);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return (List<Kupac>) res.getResult();
+        else
+            throw res.getException();
     }
     
     public void sendTesetRequest() throws Exception

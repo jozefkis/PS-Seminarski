@@ -23,5 +23,6 @@ public enum Operation
     GET_ALL_KUPAC,
     
     
+    GET_ALL_MESTO,
     TEST;
 }

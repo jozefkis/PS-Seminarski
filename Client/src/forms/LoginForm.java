@@ -144,7 +144,7 @@ public class LoginForm extends javax.swing.JFrame
             System.out.println(t.getUsername() + " " + t.getPassword());
             
             t = ClientController.getInstance().login(t);
-            new MainForm(t).setVisible(true);
+            new MainForm(t);
             this.dispose();
             
         }
