@@ -11,6 +11,7 @@ import communication.Response;
 import communication.Sender;
 import domain.Caj;
 import domain.Kupac;
+import domain.Mesto;
 import domain.Travar;
 import java.io.IOException;
 import java.net.Socket;
@@ -120,6 +121,18 @@ public class ClientController
         
         if (res.getException() == null)
             return (List<Kupac>) res.getResult();
+        else
+            throw res.getException();
+    }
+    
+    public List<Mesto> getAllMesto() throws Exception
+    {
+        Request req = new Request(Operation.GET_ALL_MESTO, null);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return (List<Mesto>) res.getResult();
         else
             throw res.getException();
     }

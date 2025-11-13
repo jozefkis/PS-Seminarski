@@ -4,8 +4,12 @@
  */
 package forms;
 
+import controller.ClientController;
 import domain.Kupac;
 import domain.Mesto;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,16 +18,21 @@ import javax.swing.JOptionPane;
  */
 public class NoviKupacDijalog extends javax.swing.JDialog
 {
-
+    private FrmMode currentMode;
     /**
      * Creates new form NoviKupacDijalog
      */
-    public NoviKupacDijalog(java.awt.Frame parent, boolean modal)
+    public NoviKupacDijalog(java.awt.Frame parent, boolean modal, FrmMode mode)
     {
         super(parent, modal);
         initComponents();
+        
         setLocationRelativeTo(null);
+        currentMode = mode;
+        prepareDialog(currentMode);
+        
         setVisible(true);
+        
     }
 
     /**
@@ -45,7 +54,9 @@ public class NoviKupacDijalog extends javax.swing.JDialog
         tfTelefon = new javax.swing.JTextField();
         comboMesto = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnAction = new javax.swing.JButton();
+        lblID = new javax.swing.JLabel();
+        tfID = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -57,44 +68,53 @@ public class NoviKupacDijalog extends javax.swing.JDialog
 
         jLabel3.setText("Mesto");
 
-        jButton1.setText("Sacuvaj");
-        jButton1.addActionListener(new java.awt.event.ActionListener()
+        btnAction.setText("Sacuvaj");
+        btnAction.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                jButton1ActionPerformed(evt);
+                btnActionActionPerformed(evt);
             }
         });
+
+        lblID.setText("ID");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(111, 111, 111)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel2)
-                    .addComponent(tfIme)
-                    .addComponent(tfPrezime)
-                    .addComponent(tfTelefon)
-                    .addComponent(comboMesto, 0, 150, Short.MAX_VALUE))
-                .addContainerGap(116, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(21, 21, 21))
+                .addContainerGap(114, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnAction)
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblID)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel2)
+                            .addComponent(tfIme)
+                            .addComponent(tfPrezime)
+                            .addComponent(tfTelefon)
+                            .addComponent(comboMesto, 0, 150, Short.MAX_VALUE)
+                            .addComponent(tfID))
+                        .addGap(113, 113, 113))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tfIme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE)
+                .addComponent(lblID)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tfIme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tfPrezime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -106,8 +126,8 @@ public class NoviKupacDijalog extends javax.swing.JDialog
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(comboMesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGap(43, 43, 43)
+                .addComponent(btnAction)
                 .addGap(19, 19, 19))
         );
 
@@ -131,24 +151,27 @@ public class NoviKupacDijalog extends javax.swing.JDialog
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
-    {//GEN-HEADEREND:event_jButton1ActionPerformed
+    private void btnActionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnActionActionPerformed
+    {//GEN-HEADEREND:event_btnActionActionPerformed
         Kupac k = checkInputs();
         if (k == null)
             return;
         
         System.out.println(k);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        
+    }//GEN-LAST:event_btnActionActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAction;
     private javax.swing.JComboBox comboMesto;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblID;
+    private javax.swing.JTextField tfID;
     private javax.swing.JTextField tfIme;
     private javax.swing.JTextField tfPrezime;
     private javax.swing.JTextField tfTelefon;
@@ -223,5 +246,45 @@ public class NoviKupacDijalog extends javax.swing.JDialog
     private boolean checkTelephoneFormat(String telefon)
     {
         return telefon.matches("^06\\d{8,10}$");
+    }
+
+    private void prepareDialog(FrmMode currentMode)
+    {
+        tfID.setEnabled(false);
+        comboMesto.removeAllItems();
+        
+        try
+        {
+            List<Mesto> all = ClientController.getInstance().getAllMesto();
+            for (Mesto mesto : all)
+            {
+                comboMesto.addItem(mesto);
+                comboMesto.setSelectedIndex(-1);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        
+        
+        
+        if (currentMode == FrmMode.DODAJ)
+        {
+            tfID.setVisible(false);
+            lblID.setVisible(false);
+            
+            btnAction.setText("Dodaj");
+            setTitle("Dijalog - Novi kupac");
+        }
+        else if (currentMode == FrmMode.IZMENI)
+        {
+            btnAction.setText("Izmeni");
+            setTitle("Dijalog - Izmeni kupca");
+        }
+        else
+        {
+            System.err.println("NEPOSTOJECI MODE!");
+        }
     }
 }

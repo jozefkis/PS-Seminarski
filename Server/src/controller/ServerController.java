@@ -6,6 +6,7 @@ package controller;
 
 import domain.Caj;
 import domain.Kupac;
+import domain.Mesto;
 import domain.Travar;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import so.kupac.SOGetAllKupac;
 import so.login.SOLogin;
 import so.caj.SOGetAllCaj;
 import so.logout.SOLogout;
+import so.mesto.SOGetAllMesto;
 import so.travar.SOGetAllTravar;
 
 /**
@@ -69,6 +71,13 @@ public class ServerController
     {
         SOGetAllCaj so = new SOGetAllCaj();
         so.templateExecute(new Caj());
+        return so.getAll();
+    }
+    
+    public List<Mesto> getAllMesto() throws Exception
+    {
+        SOGetAllMesto so = new SOGetAllMesto();
+        so.templateExecute(new Mesto());
         return so.getAll();
     }
 

@@ -93,6 +93,9 @@ public class ClientThread implements Runnable
                 case GET_ALL_CAJ:
                     response.setResult(ServerController.getInstance().getAllCaj());
                     break;
+                case GET_ALL_MESTO:
+                    response.setResult(ServerController.getInstance().getAllMesto());
+                    break;
                     
             }
         }

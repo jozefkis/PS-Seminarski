@@ -11,9 +11,7 @@ import domain.Travar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -33,6 +31,7 @@ public class MainForm extends javax.swing.JFrame
         initComponents();
         lblTest.setText(ulogovani.getIme() + " " + ulogovani.getPrezime());
         setLocationRelativeTo(null);
+        ((javax.swing.JSpinner.DefaultEditor) spnrKolicina.getEditor()).getTextField().setEditable(false);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Glavna klijentska forma");
         populateTravarCombo();
@@ -312,7 +311,7 @@ public class MainForm extends javax.swing.JFrame
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
-        new NoviKupacDijalog(this, true);
+        new NoviKupacDijalog(this, true, FrmMode.DODAJ);
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -351,7 +350,12 @@ public class MainForm extends javax.swing.JFrame
             List<Travar> all = ClientController.getInstance().getAllTravar();
 
             comboTravari.removeAllItems();
-            comboTravari.setModel(new DefaultComboBoxModel(all.toArray()));
+            
+            for (Travar travar : all)
+            {
+                comboTravari.addItem(travar);
+            }
+            
             comboTravari.setSelectedItem(ulogovani);
         }
         catch (Exception ex)
@@ -365,22 +369,18 @@ public class MainForm extends javax.swing.JFrame
         try
         {
             List<Kupac> all = ClientController.getInstance().getAllKupac();
-
             comboKupci.removeAllItems();
-
-            SwingUtilities.invokeLater(() ->
+            
+            for (Kupac kupac : all)
             {
-                comboKupci.setModel(new DefaultComboBoxModel(all.toArray()));
-                comboKupci.setSelectedIndex(-1);
-                comboKupci.repaint();
-            });
+                comboKupci.addItem(kupac);
+            }
 
         }
         catch (Exception e)
         {
             System.out.println("comboKupci error");
             System.out.println(e.getMessage());
-
         }
     }
 
@@ -390,12 +390,10 @@ public class MainForm extends javax.swing.JFrame
         {
             List<Caj> all = ClientController.getInstance().getAllCaj();
 
-            SwingUtilities.invokeLater(() ->
+            for (Caj caj : all)
             {
-                comboCajevi.setModel(new DefaultComboBoxModel(all.toArray()));
-                comboCajevi.setSelectedIndex(-1);
-                comboCajevi.repaint();
-            });
+                comboKupci.addItem(caj);
+            }
         }
         catch (Exception e)
         {
