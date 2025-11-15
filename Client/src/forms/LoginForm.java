@@ -57,6 +57,7 @@ public class LoginForm extends javax.swing.JFrame
 
         jLabel1.setText("username");
 
+        tfUsername.setText("anci");
         tfUsername.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -66,6 +67,8 @@ public class LoginForm extends javax.swing.JFrame
         });
 
         jLabel2.setText("password");
+
+        pfPassword.setText("anci");
 
         btnLogin.setText("Log in");
         btnLogin.addActionListener(new java.awt.event.ActionListener()

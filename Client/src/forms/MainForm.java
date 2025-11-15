@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import models.TableModelStavkeRacuna;
 
 /**
  *
@@ -30,13 +31,18 @@ public class MainForm extends javax.swing.JFrame
         ulogovani = t;
         initComponents();
         lblTest.setText(ulogovani.getIme() + " " + ulogovani.getPrezime());
+        
+        tblStavke.setModel(new TableModelStavkeRacuna());
+        
         setLocationRelativeTo(null);
         ((javax.swing.JSpinner.DefaultEditor) spnrKolicina.getEditor()).getTextField().setEditable(false);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Glavna klijentska forma");
+        
         populateTravarCombo();
         populateKupacCombo();
         populateCajCombo();
+        
         setVisible(true);
     }
 
