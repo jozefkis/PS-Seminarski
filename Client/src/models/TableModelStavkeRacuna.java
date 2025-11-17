@@ -15,7 +15,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class TableModelStavkeRacuna extends AbstractTableModel
 {
-    private final String[] columnNames = {"rb", "Čaj", "Količina", "Iznos"};
+    private final String[] columnNames = {"rb", "Čaj", "Cena", "Količina", "Iznos"};
     private List<StavkaRacuna> stavke;
     private int rb;
 
@@ -50,8 +50,10 @@ public class TableModelStavkeRacuna extends AbstractTableModel
             case 1:
                 return sr.getCaj().getNaziv();
             case 2:
-                return sr.getKolicina();
+                return sr.getCaj().getCena();
             case 3:
+                return sr.getKolicina();
+            case 4:
                 return sr.getIznos();
             default:
                 return null;
@@ -69,23 +71,37 @@ public class TableModelStavkeRacuna extends AbstractTableModel
         return stavke;
     }
     
-    public void addStavka(StavkaRacuna sr)
+    public boolean addStavka(StavkaRacuna sr)
     {
         if (stavke.contains(sr))
-            return;
+            return false;
         
         sr.setRb(++rb);
         stavke.add(sr);
+        fireTableDataChanged();
+        
+        return true;
     }
     
-    public void removeStavka(StavkaRacuna sr)
+    public boolean removeStavka(StavkaRacuna sr)
     {
         if (stavke.contains(sr))
         {
+            int rbToRemove = sr.getRb();
             stavke.remove(sr);
+            
+            for (int i = rbToRemove - 1; i < stavke.size(); i++)
+            {
+                StavkaRacuna s = stavke.get(i);
+                s.setRb(s.getRb() - 1);
+            }
             --rb;
+            
+            fireTableDataChanged();
+            return true;
         }
         
+        return false;
     }
     
 }

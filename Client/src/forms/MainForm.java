@@ -7,6 +7,7 @@ package forms;
 import controller.ClientController;
 import domain.Caj;
 import domain.Kupac;
+import domain.StavkaRacuna;
 import domain.Travar;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,7 +22,8 @@ import models.TableModelStavkeRacuna;
 public class MainForm extends javax.swing.JFrame
 {
 
-    Travar ulogovani;
+    private Travar ulogovani;
+    private double ukupno = 0;
 
     /**
      * Creates new form MainForm
@@ -31,18 +33,16 @@ public class MainForm extends javax.swing.JFrame
         ulogovani = t;
         initComponents();
         lblTest.setText(ulogovani.getIme() + " " + ulogovani.getPrezime());
-        
-        tblStavke.setModel(new TableModelStavkeRacuna());
-        
         setLocationRelativeTo(null);
         ((javax.swing.JSpinner.DefaultEditor) spnrKolicina.getEditor()).getTextField().setEditable(false);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Glavna klijentska forma");
         
+        tblStavke.setModel(new TableModelStavkeRacuna());
+        
         populateTravarCombo();
         populateKupacCombo();
         populateCajCombo();
-        
         setVisible(true);
     }
 
@@ -98,17 +98,15 @@ public class MainForm extends javax.swing.JFrame
         tblStavke.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String []
             {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         tblStavke.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tblStavke.setShowVerticalLines(true);
         jScrollPane1.setViewportView(tblStavke);
 
         jLabel4.setText("Čaj");
@@ -118,8 +116,22 @@ public class MainForm extends javax.swing.JFrame
         spnrKolicina.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
         btnIzbrisiStavku.setText("Izbrisi stavku");
+        btnIzbrisiStavku.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnIzbrisiStavkuActionPerformed(evt);
+            }
+        });
 
         btnDodajStavku.setText("Dodaj stavku");
+        btnDodajStavku.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnDodajStavkuActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -246,6 +258,13 @@ public class MainForm extends javax.swing.JFrame
         jMenu2.add(jMenuItem1);
 
         jMenuItem2.setText("Pretraga kupaca");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem2);
 
         jMenuBar1.add(jMenu2);
@@ -306,7 +325,6 @@ public class MainForm extends javax.swing.JFrame
     {//GEN-HEADEREND:event_btnSndTestActionPerformed
         try
         {
-            // TODO add your handling code here:
             ClientController.getInstance().sendTesetRequest();
         }
         catch (Exception ex)
@@ -320,6 +338,53 @@ public class MainForm extends javax.swing.JFrame
         new NoviKupacDijalog(this, true, FrmMode.DODAJ);
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void btnDodajStavkuActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnDodajStavkuActionPerformed
+    {//GEN-HEADEREND:event_btnDodajStavkuActionPerformed
+        Caj c = (Caj) comboCajevi.getSelectedItem();
+        int kolicina = (int) spnrKolicina.getValue();
+        
+        StavkaRacuna sr = new StavkaRacuna();
+        
+        sr.setCaj(c);
+        sr.setKolicina(kolicina);
+        sr.setCena(c.getCena());
+        sr.setIznos(kolicina*c.getCena());
+        
+        boolean result = ((TableModelStavkeRacuna) tblStavke.getModel()).addStavka(sr);
+        
+        if (!result)
+        {
+            JOptionPane.showMessageDialog(this, "Već ste dodali taj čaj", "", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        ukupno += sr.getIznos();
+        tfUkupanIznos.setText(String.format("%.2f", ukupno));
+    }//GEN-LAST:event_btnDodajStavkuActionPerformed
+
+    private void btnIzbrisiStavkuActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnIzbrisiStavkuActionPerformed
+    {//GEN-HEADEREND:event_btnIzbrisiStavkuActionPerformed
+        int row = tblStavke.getSelectedRow();
+        if (row != -1)
+        {
+            TableModelStavkeRacuna model = (TableModelStavkeRacuna) tblStavke.getModel();
+            StavkaRacuna toRemove = model.getStavke().get(row); 
+            boolean result = model.removeStavka(toRemove);
+            
+            if (result)
+            {
+                ukupno -= toRemove.getIznos();
+                tfUkupanIznos.setText(String.format("%.2f", ukupno));
+            }
+        }
+            
+    }//GEN-LAST:event_btnIzbrisiStavkuActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem2ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem2ActionPerformed
+        new PretragaKupacaDijalog(this, true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDodajStavku;
@@ -395,10 +460,11 @@ public class MainForm extends javax.swing.JFrame
         try
         {
             List<Caj> all = ClientController.getInstance().getAllCaj();
+            comboCajevi.removeAllItems();
 
             for (Caj caj : all)
             {
-                comboKupci.addItem(caj);
+                comboCajevi.addItem(caj);
             }
         }
         catch (Exception e)
