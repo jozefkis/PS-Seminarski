@@ -96,6 +96,9 @@ public class ClientThread implements Runnable
                 case GET_ALL_MESTO:
                     response.setResult(ServerController.getInstance().getAllMesto());
                     break;
+                case FILTER_KUPAC:
+                    response.setResult(ServerController.getInstance().filterKupac((String) req.getArgument()));
+                    break;
                     
             }
         }

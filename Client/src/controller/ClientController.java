@@ -145,6 +145,18 @@ public class ClientController
         System.out.println(res.getResult());
       
     }
+    
+    public List<Kupac> filterKupci(String filterValue) throws Exception
+    {
+        Request req = new Request(Operation.FILTER_KUPAC, filterValue);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return (List<Kupac>) res.getResult();
+        else
+            throw res.getException();
+    }
 
     public void closeConnection()
     {

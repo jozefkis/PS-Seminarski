@@ -13,6 +13,7 @@ import java.util.List;
 import so.kupac.SOGetAllKupac;
 import so.login.SOLogin;
 import so.caj.SOGetAllCaj;
+import so.kupac.SOFilterKupac;
 import so.logout.SOLogout;
 import so.mesto.SOGetAllMesto;
 import so.travar.SOGetAllTravar;
@@ -79,6 +80,13 @@ public class ServerController
         SOGetAllMesto so = new SOGetAllMesto();
         so.templateExecute(new Mesto());
         return so.getAll();
+    }
+    
+    public List<Kupac> filterKupac(String filterValue) throws Exception
+    {
+        SOFilterKupac so = new SOFilterKupac(filterValue);
+        so.templateExecute(new Kupac());
+        return so.getFiltered();
     }
 
     public List<Travar> getUlogovaniTravari()

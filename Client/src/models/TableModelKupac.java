@@ -69,6 +69,17 @@ public class TableModelKupac extends AbstractTableModel
     {
         return columnNames[column];
     }
+
+    public List<Kupac> getKupci()
+    {
+        return kupci;
+    }
+
+    public void setKupci(List<Kupac> kupci)
+    {
+        this.kupci = kupci;
+        fireTableDataChanged();
+    }
     
     
 }

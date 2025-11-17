@@ -21,6 +21,7 @@ public enum Operation
     
     
     GET_ALL_KUPAC,
+    FILTER_KUPAC,
     
     
     GET_ALL_MESTO,

@@ -4,16 +4,19 @@
  */
 package forms;
 
+import controller.ClientController;
+import domain.Kupac;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.TableModelKupac;
 
 /**
  *
- * @author SOFIJA
+ * @author Yo
  */
 public class PretragaKupacaDijalog extends javax.swing.JDialog
 {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PretragaKupacaDijalog.class.getName());
 
     /**
      * Creates new form PretragaKupacaDijalog
@@ -23,6 +26,7 @@ public class PretragaKupacaDijalog extends javax.swing.JDialog
         super(parent, modal);
         initComponents();
         tblKupci.setModel(new TableModelKupac());
+        setTitle("Pretraga kupaca");
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -38,15 +42,14 @@ public class PretragaKupacaDijalog extends javax.swing.JDialog
     {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        tfImePrezime = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblKupci = new javax.swing.JTable();
-        bntDetalji = new javax.swing.JButton();
+        tfImePrezime = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        btnPretrazi = new javax.swing.JButton();
+        btnDetalji = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        jLabel1.setText("Ime i prezime");
 
         tblKupci.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
@@ -58,41 +61,53 @@ public class PretragaKupacaDijalog extends javax.swing.JDialog
 
             }
         ));
-        tblKupci.setShowGrid(false);
-        tblKupci.setShowHorizontalLines(true);
-        tblKupci.setShowVerticalLines(true);
         jScrollPane1.setViewportView(tblKupci);
 
-        bntDetalji.setText("Detalji");
+        jLabel1.setText("Ime i prezime");
+
+        btnPretrazi.setText("Pretraži");
+        btnPretrazi.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnPretraziActionPerformed(evt);
+            }
+        });
+
+        btnDetalji.setText("Detalji");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(63, 63, 63)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(tfImePrezime, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
+                        .addComponent(btnPretrazi)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tfImePrezime, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(77, 77, 77))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(bntDetalji, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                .addComponent(btnDetalji)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(tfImePrezime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfImePrezime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPretrazi))
                 .addGap(18, 18, 18)
-                .addComponent(bntDetalji)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(btnDetalji)
                 .addContainerGap())
         );
 
@@ -107,7 +122,7 @@ public class PretragaKupacaDijalog extends javax.swing.JDialog
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -116,13 +131,97 @@ public class PretragaKupacaDijalog extends javax.swing.JDialog
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnPretraziActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnPretraziActionPerformed
+    {//GEN-HEADEREND:event_btnPretraziActionPerformed
+        String imePrezime = tfImePrezime.getText().strip();
+
+        if (imePrezime.isEmpty())
+        {
+            try
+            {
+                List<Kupac> filtered = ClientController.getInstance().getAllKupac();
+                ((TableModelKupac) tblKupci.getModel()).setKupci(filtered);
+                return;
+            }
+            catch (Exception ex)
+            {
+                Logger.getLogger(PretragaKupacaDijalog.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        try
+        {
+            List<Kupac> filtered = ClientController.getInstance().filterKupci(imePrezime);
+            ((TableModelKupac) tblKupci.getModel()).setKupci(filtered);
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(PretragaKupacaDijalog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnPretraziActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    
+    public static void main(String args[])
+    {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        }
+        catch (ClassNotFoundException ex)
+        {
+            java.util.logging.Logger.getLogger(PretragaKupacaDijalog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        catch (InstantiationException ex)
+        {
+            java.util.logging.Logger.getLogger(PretragaKupacaDijalog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        catch (IllegalAccessException ex)
+        {
+            java.util.logging.Logger.getLogger(PretragaKupacaDijalog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
+            java.util.logging.Logger.getLogger(PretragaKupacaDijalog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                PretragaKupacaDijalog dialog = new PretragaKupacaDijalog(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter()
+                {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e)
+                    {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bntDetalji;
+    private javax.swing.JButton btnDetalji;
+    private javax.swing.JButton btnPretrazi;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
