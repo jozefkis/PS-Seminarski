@@ -99,6 +99,12 @@ public class Mesto implements AbstractDomainObject
         return "";
     }
 
+    @Override
+    public String uslovZaFilter()
+    {
+        return "";
+    }
+    
     public long getIdMesto()
     {
         return idMesto;

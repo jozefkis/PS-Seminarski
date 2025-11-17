@@ -117,7 +117,13 @@ public class Kupac implements AbstractDomainObject
     {
         return "";
     }
-
+    
+    @Override
+    public String uslovZaFilter()
+    {
+        return " WHERE LOWER(CONCAT(ime, ' ', prezime)) LIKE ? ";
+    }
+    
     public long getIdKupac()
     {
         return idKupac;

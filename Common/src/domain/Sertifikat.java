@@ -89,6 +89,12 @@ public class Sertifikat implements AbstractDomainObject
         return "";
     }
 
+    @Override
+    public String uslovZaFilter()
+    {
+        return "";
+    }
+    
     public long getIdSertifikat()
     {
         return idSertifikat;

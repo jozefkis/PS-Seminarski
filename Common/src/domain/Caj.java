@@ -109,6 +109,12 @@ public class Caj implements AbstractDomainObject
     {
         return "";
     }
+    
+    @Override
+    public String uslovZaFilter()
+    {
+        return "";
+    }
 
     public long getIdCaj()
     {
@@ -189,6 +195,8 @@ public class Caj implements AbstractDomainObject
         }
         return Objects.equals(this.naziv, other.naziv);
     }
+
+    
     
     
 }

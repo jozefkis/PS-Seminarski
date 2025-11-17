@@ -120,6 +120,12 @@ public class Racun implements AbstractDomainObject
         return "";
     }
 
+    @Override
+    public String uslovZaFilter()
+    {
+        return "";
+    }
+    
     public long getIdRacun()
     {
         return idRacun;

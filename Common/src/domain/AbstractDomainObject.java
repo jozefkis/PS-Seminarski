@@ -24,4 +24,5 @@ public interface AbstractDomainObject extends Serializable
     public String vrednostiZaUpdate();
     public String uslov();
     public String uslovZaSelect();
+    public String uslovZaFilter();
 }

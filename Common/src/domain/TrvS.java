@@ -106,7 +106,11 @@ public class TrvS implements AbstractDomainObject
         return "";
     }
 
-    
+    @Override
+    public String uslovZaFilter()
+    {
+        return "";
+    }
     
     public Travar getTravar()
     {

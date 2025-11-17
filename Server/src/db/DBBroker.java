@@ -76,5 +76,20 @@ public class DBBroker
         Statement s = connection.createStatement();
         s.executeUpdate(naredba);
     }
+    
+    public List<AbstractDomainObject> filter(AbstractDomainObject ado, Connection connection, String filterValue) throws SQLException
+    {
+        String upit = "SELECT * FROM " + ado.nazivTabele() + " " + ado.alijas()
+                + " " + ado.join() + " " + ado.uslovZaFilter();
+        System.out.println(upit);
+        
+        String likeParam = filterValue.toLowerCase() + "%";
+        
+        PreparedStatement ps = connection.prepareStatement(upit);
+        ps.setString(1, likeParam);
+        ResultSet rs = ps.executeQuery();
+        
+        return ado.vratiListu(rs);
+    }
 
 }

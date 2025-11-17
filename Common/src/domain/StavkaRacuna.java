@@ -129,6 +129,11 @@ public class StavkaRacuna implements AbstractDomainObject
         return " WHERE c.idCaj = " + caj.getIdCaj();
     }
 
+    @Override
+    public String uslovZaFilter()
+    {
+        return "";
+    }
     
     public Racun getRacun()
     {

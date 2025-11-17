@@ -137,6 +137,12 @@ public class Travar implements AbstractDomainObject
         return "";
     }
 
+    @Override
+    public String uslovZaFilter()
+    {
+        return "";
+    }
+    
     public long getIdTravar()
     {
         return idTravar;
