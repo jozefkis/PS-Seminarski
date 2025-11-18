@@ -22,7 +22,9 @@ public enum Operation
     
     GET_ALL_KUPAC,
     FILTER_KUPAC,
-    
+    UPDATE_KUPAC,
+    DELETE_KUPAC,
+    ADD_KUPAC,
     
     GET_ALL_MESTO,
     TEST;

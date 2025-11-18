@@ -9,6 +9,7 @@ import communication.Request;
 import communication.Response;
 import communication.Sender;
 import controller.ServerController;
+import domain.Kupac;
 import domain.Travar;
 import java.io.IOException;
 import java.net.Socket;
@@ -98,6 +99,9 @@ public class ClientThread implements Runnable
                     break;
                 case FILTER_KUPAC:
                     response.setResult(ServerController.getInstance().filterKupac((String) req.getArgument()));
+                    break;
+                case UPDATE_KUPAC:
+                    ServerController.getInstance().updateKupac((Kupac) req.getArgument());
                     break;
                     
             }

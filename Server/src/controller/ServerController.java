@@ -14,6 +14,7 @@ import so.kupac.SOGetAllKupac;
 import so.login.SOLogin;
 import so.caj.SOGetAllCaj;
 import so.kupac.SOFilterKupac;
+import so.kupac.SOUpdateKupac;
 import so.logout.SOLogout;
 import so.mesto.SOGetAllMesto;
 import so.travar.SOGetAllTravar;
@@ -87,6 +88,12 @@ public class ServerController
         SOFilterKupac so = new SOFilterKupac(filterValue);
         so.templateExecute(new Kupac());
         return so.getFiltered();
+    }
+    
+    public void updateKupac(Kupac kupac) throws Exception
+    {
+        SOUpdateKupac so = new SOUpdateKupac();
+        so.templateExecute(kupac);
     }
 
     public List<Travar> getUlogovaniTravari()

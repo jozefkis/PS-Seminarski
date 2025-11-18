@@ -157,6 +157,19 @@ public class ClientController
         else
             throw res.getException();
     }
+    
+    public void updateKupac(Kupac kupac) throws Exception
+    {
+        Request req = new Request(Operation.UPDATE_KUPAC, kupac);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return;
+        else
+            throw res.getException();
+        
+    }
 
     public void closeConnection()
     {

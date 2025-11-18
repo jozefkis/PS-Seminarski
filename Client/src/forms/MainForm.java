@@ -4,6 +4,8 @@
  */
 package forms;
 
+import forms.kupac.InsertUpdateKupacDijalog;
+import forms.kupac.PretragaKupacaDijalog;
 import controller.ClientController;
 import domain.Caj;
 import domain.Kupac;
@@ -335,7 +337,7 @@ public class MainForm extends javax.swing.JFrame
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
-        new NoviKupacDijalog(this, true, FrmMode.DODAJ);
+        new InsertUpdateKupacDijalog(this, true, FrmMode.DODAJ);
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -123,5 +124,35 @@ public class Mesto implements AbstractDomainObject
     public void setNaziv(String naziv) 
     {
         this.naziv = naziv;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Mesto other = (Mesto) obj;
+        if (this.idMesto != other.idMesto)
+        {
+            return false;
+        }
+        return Objects.equals(this.naziv, other.naziv);
     }
 }

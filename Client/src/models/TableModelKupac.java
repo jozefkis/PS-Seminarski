@@ -7,6 +7,8 @@ package models;
 import controller.ClientController;
 import domain.Kupac;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -81,5 +83,16 @@ public class TableModelKupac extends AbstractTableModel
         fireTableDataChanged();
     }
     
-    
+    public void refresh()
+    {
+        try
+        {
+            kupci = ClientController.getInstance().getAllKupac();
+            fireTableDataChanged();
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(TableModelKupac.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

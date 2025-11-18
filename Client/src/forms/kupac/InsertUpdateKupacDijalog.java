@@ -2,37 +2,56 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package forms;
+package forms.kupac;
 
 import controller.ClientController;
 import domain.Kupac;
 import domain.Mesto;
+import forms.FrmMode;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import models.TableModelKupac;
 
 /**
  *
  * @author Yo
  */
-public class NoviKupacDijalog extends javax.swing.JDialog
+public class InsertUpdateKupacDijalog extends javax.swing.JDialog
 {
+
     private FrmMode currentMode;
+    private Kupac kupac;
+
     /**
      * Creates new form NoviKupacDijalog
      */
-    public NoviKupacDijalog(java.awt.Frame parent, boolean modal, FrmMode mode)
+    public InsertUpdateKupacDijalog(java.awt.Frame parent, boolean modal, FrmMode mode)
     {
         super(parent, modal);
         initComponents();
-        
+
         setLocationRelativeTo(null);
         currentMode = mode;
-        prepareDialog(currentMode);
-        
+        prepareDialog();
+
         setVisible(true);
-        
+
+    }
+
+    public InsertUpdateKupacDijalog(java.awt.Dialog parent, boolean modal, FrmMode mode, Kupac kupac)
+    {
+        super(parent, modal);
+        initComponents();
+
+        currentMode = mode;
+        this.kupac = kupac;
+
+        prepareDialog();
+        setLocationRelativeTo(null);
+
+        setVisible(true);
     }
 
     /**
@@ -155,10 +174,29 @@ public class NoviKupacDijalog extends javax.swing.JDialog
     {//GEN-HEADEREND:event_btnActionActionPerformed
         Kupac k = checkInputs();
         if (k == null)
+        {
             return;
+        }
         
-        System.out.println(k);
-        
+        if (currentMode == FrmMode.IZMENI)
+        {
+            try
+            {
+                ClientController.getInstance().updateKupac(kupac);
+                JOptionPane.showMessageDialog(this, "Izmene su uspešno sačuvane.", "Poruka", JOptionPane.INFORMATION_MESSAGE);
+                
+                PretragaKupacaDijalog pkd = (PretragaKupacaDijalog) getParent();
+                ((TableModelKupac) pkd.getTblKupci().getModel()).refresh();
+                
+                this.dispose();
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Greska!\n" + ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
     }//GEN-LAST:event_btnActionActionPerformed
 
 
@@ -179,61 +217,151 @@ public class NoviKupacDijalog extends javax.swing.JDialog
 
     private Kupac checkInputs()
     {
-        String ime = capitalize(tfIme.getText().strip());
-        String prezime = capitalize(tfPrezime.getText().strip());
-
+        String ime = tfIme.getText().strip();
+        String prezime = tfPrezime.getText().strip();
         String telefon = tfTelefon.getText().strip();
-        
-        if (ime == null || ime.isEmpty())
-        {
-            JOptionPane.showMessageDialog(this, "Ime ne sme biti prazno!", "Greska", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-        else if (ime.length() > 30)
-        {
-            JOptionPane.showMessageDialog(this, "Ime ne sme imati vise od 30 karaktera!", "Greska", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-        
-        if (prezime == null || prezime.isEmpty())
-        {
-            JOptionPane.showMessageDialog(this, "Prezime ne sme biti prazno!", "Greska", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-        else if (prezime.length() > 30)
-        {
-            JOptionPane.showMessageDialog(this, "Prezime ne sme imati vise od 30 karaktera!", "Greska", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-        
-        if (telefon == null || telefon.isEmpty())
-        {
-            JOptionPane.showMessageDialog(this, "Telefon mora biti unet!", "Greska", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-        else if (ime.length() > 12)
-        {
-            JOptionPane.showMessageDialog(this, "Telefon ne sme imati vise od 12 karaktera!", "Greska", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-        else if (!checkTelephoneFormat(telefon))
-        {
-            JOptionPane.showMessageDialog(this, "Pogrešan format telefona!", "Greska", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-        
-        if (!(comboMesto.getSelectedItem() instanceof Mesto))
-        {
-            JOptionPane.showMessageDialog(this, "Morate izabrati mesto!", "Greska", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-        
-        Mesto m = (Mesto) comboMesto.getSelectedItem();
-        
-        return new Kupac(ime, prezime, telefon, m);
+        Object selectedItem = comboMesto.getSelectedItem();
 
+        if (!validateIme(ime))
+        {
+            return null;
+        }
+        if (!validatePrezime(prezime))
+        {
+            return null;
+        }
+        if (!validateTelefon(telefon))
+        {
+            return null;
+        }
+        if (!validateMesto(selectedItem))
+        {
+            return null;
+        }
+
+        String formattedIme = capitalize(ime);
+        String formattedPrezime = capitalize(prezime);
+        Mesto m = (Mesto) selectedItem;
+        
+        if (kupac != null)
+        {
+            kupac.setIme(formattedIme);
+            kupac.setPrezime(formattedPrezime);
+            kupac.setTelefon(telefon);
+            kupac.setMesto(m);
+            
+            return kupac;
+        }
+        
+        return new Kupac(formattedIme, formattedPrezime, telefon, m);
     }
 
+
+
+    private void prepareDialog()
+    {
+        tfID.setEnabled(false);
+        comboMesto.removeAllItems();
+
+        try
+        {
+            List<Mesto> all = ClientController.getInstance().getAllMesto();
+            for (Mesto mesto : all)
+            {
+                comboMesto.addItem(mesto);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        if (currentMode == FrmMode.DODAJ)
+        {
+            tfID.setVisible(false);
+            lblID.setVisible(false);
+
+            btnAction.setText("Dodaj");
+            setTitle("Dijalog - Novi kupac");
+        }
+        else if (currentMode == FrmMode.IZMENI)
+        {
+            btnAction.setText("Izmeni");
+            setTitle("Dijalog - Izmeni kupca");
+
+            tfID.setText(String.valueOf(kupac.getIdKupac()));
+            tfIme.setText(kupac.getIme());
+            tfPrezime.setText(kupac.getPrezime());
+            tfTelefon.setText(kupac.getTelefon());
+            comboMesto.setSelectedItem(kupac.getMesto());
+        }
+        else
+        {
+            System.err.println("NEPOSTOJECI MODE!");
+        }
+    }
+
+    private boolean validateIme(String ime)
+    {
+        if (ime == null || ime.isEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Ime ne sme biti prazno!", "Greška", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (ime.length() > 30)
+        {
+            JOptionPane.showMessageDialog(this, "Ime ne sme imati vise od 30 karaktera!", "Greška", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validatePrezime(String prezime)
+    {
+        if (prezime == null || prezime.isEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Prezime ne sme biti prazno!", "Greška", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (prezime.length() > 30)
+        {
+            JOptionPane.showMessageDialog(this, "Prezime ne sme imati vise od 30 karaktera!", "Greška", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateTelefon(String telefon)
+    {
+        if (telefon == null || telefon.isEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Telefon mora biti unet!", "Greška", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (telefon.length() > 12)
+        {
+            JOptionPane.showMessageDialog(this, "Telefon ne sme imati vise od 12 karaktera!", "Greška", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!checkTelephoneFormat(telefon))
+        {
+            JOptionPane.showMessageDialog(this, "Pogrešan format telefona!", "Greška", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateMesto(Object obj)
+    {
+        if (!(obj instanceof Mesto))
+        {
+            JOptionPane.showMessageDialog(this, "Morate izabrati mesto!", "Greška", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
     private String capitalize(String str)
     {
         if (str == null || str.isEmpty())
@@ -242,49 +370,9 @@ public class NoviKupacDijalog extends javax.swing.JDialog
         }
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
-    
+
     private boolean checkTelephoneFormat(String telefon)
     {
         return telefon.matches("^06\\d{8,10}$");
-    }
-
-    private void prepareDialog(FrmMode currentMode)
-    {
-        tfID.setEnabled(false);
-        comboMesto.removeAllItems();
-        
-        try
-        {
-            List<Mesto> all = ClientController.getInstance().getAllMesto();
-            for (Mesto mesto : all)
-            {
-                comboMesto.addItem(mesto);
-                comboMesto.setSelectedIndex(-1);
-            }
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-        
-        
-        
-        if (currentMode == FrmMode.DODAJ)
-        {
-            tfID.setVisible(false);
-            lblID.setVisible(false);
-            
-            btnAction.setText("Dodaj");
-            setTitle("Dijalog - Novi kupac");
-        }
-        else if (currentMode == FrmMode.IZMENI)
-        {
-            btnAction.setText("Izmeni");
-            setTitle("Dijalog - Izmeni kupca");
-        }
-        else
-        {
-            System.err.println("NEPOSTOJECI MODE!");
-        }
     }
 }
