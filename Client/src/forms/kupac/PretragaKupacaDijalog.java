@@ -87,6 +87,13 @@ public class PretragaKupacaDijalog extends javax.swing.JDialog
         });
 
         btnObrisi.setText("Obrisi");
+        btnObrisi.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnObrisiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -189,6 +196,28 @@ public class PretragaKupacaDijalog extends javax.swing.JDialog
         Kupac kupac = ((TableModelKupac) tblKupci.getModel()).getKupci().get(index);
         new InsertUpdateKupacDijalog(this, true, FrmMode.IZMENI, kupac);
     }//GEN-LAST:event_btnDetaljiActionPerformed
+
+    private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnObrisiActionPerformed
+    {//GEN-HEADEREND:event_btnObrisiActionPerformed
+        int index = tblKupci.getSelectedRow();
+        if (index < 0)
+        {
+            JOptionPane.showMessageDialog(this, "Morate izabrati kupca.", "", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        Kupac kupac = ((TableModelKupac) tblKupci.getModel()).getKupci().get(index);
+        try
+        {
+            ClientController.getInstance().deleteKupac(kupac);
+            JOptionPane.showMessageDialog(this, "Kupac je uspešno izbrisan.", "Poruka", JOptionPane.INFORMATION_MESSAGE);
+            ((TableModelKupac) getTblKupci().getModel()).refresh();
+        }
+        catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, "GRESKA\n" + ex.getMessage(), "Poruka", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_btnObrisiActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

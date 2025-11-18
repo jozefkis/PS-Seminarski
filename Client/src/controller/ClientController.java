@@ -170,6 +170,19 @@ public class ClientController
             throw res.getException();
         
     }
+    
+    public void deleteKupac(Kupac kupac) throws Exception
+    {
+        Request req = new Request(Operation.DELETE_KUPAC, kupac);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return;
+        else
+            throw res.getException();
+        
+    }
 
     public void closeConnection()
     {

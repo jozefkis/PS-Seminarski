@@ -13,6 +13,7 @@ import java.util.List;
 import so.kupac.SOGetAllKupac;
 import so.login.SOLogin;
 import so.caj.SOGetAllCaj;
+import so.kupac.SODeleteKupac;
 import so.kupac.SOFilterKupac;
 import so.kupac.SOUpdateKupac;
 import so.logout.SOLogout;
@@ -55,6 +56,44 @@ public class ServerController
         return so.getZaOdjavu();
     }
     
+    //==== Kupac operations ====
+    public List<Kupac> getAllKupac() throws Exception
+    {
+        SOGetAllKupac so = new SOGetAllKupac();
+        so.templateExecute(new Kupac());
+        return so.getAll();
+    }
+    
+    public List<Kupac> filterKupac(String filterValue) throws Exception
+    {
+        SOFilterKupac so = new SOFilterKupac(filterValue);
+        so.templateExecute(new Kupac());
+        return so.getFiltered();
+    }
+    
+    public void insertKupac() throws Exception
+    {
+        
+    }
+    
+    public void updateKupac(Kupac kupac) throws Exception
+    {
+        SOUpdateKupac so = new SOUpdateKupac();
+        so.templateExecute(kupac);
+    }
+    
+    public void deleteKupac(Kupac kupac) throws Exception
+    {
+        SODeleteKupac so = new SODeleteKupac();
+        so.templateExecute(kupac);
+    }
+    
+    
+    
+    
+    
+    
+    
     public List<Travar> getAllTravar() throws Exception
     {
         SOGetAllTravar so = new SOGetAllTravar();
@@ -62,12 +101,6 @@ public class ServerController
         return so.getAll();
     }
     
-    public List<Kupac> getAllKupac() throws Exception
-    {
-        SOGetAllKupac so = new SOGetAllKupac();
-        so.templateExecute(new Kupac());
-        return so.getAll();
-    }
     
     public List<Caj> getAllCaj() throws Exception
     {
@@ -83,19 +116,7 @@ public class ServerController
         return so.getAll();
     }
     
-    public List<Kupac> filterKupac(String filterValue) throws Exception
-    {
-        SOFilterKupac so = new SOFilterKupac(filterValue);
-        so.templateExecute(new Kupac());
-        return so.getFiltered();
-    }
     
-    public void updateKupac(Kupac kupac) throws Exception
-    {
-        SOUpdateKupac so = new SOUpdateKupac();
-        so.templateExecute(kupac);
-    }
-
     public List<Travar> getUlogovaniTravari()
     {
         return ulogovaniTravari;

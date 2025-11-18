@@ -103,6 +103,9 @@ public class ClientThread implements Runnable
                 case UPDATE_KUPAC:
                     ServerController.getInstance().updateKupac((Kupac) req.getArgument());
                     break;
+                case DELETE_KUPAC:
+                    ServerController.getInstance().deleteKupac((Kupac) req.getArgument());
+                    break;
                     
             }
         }
