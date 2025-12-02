@@ -74,25 +74,25 @@ public class Kupac implements AbstractDomainObject
 
     //=== Implemented ADO methods ===
     @Override
-    public String nazivTabele()
+    public String getTableName()
     {
         return "kupac";
     }
 
     @Override
-    public String alijas()
+    public String getAlias()
     {
         return "k";
     }
 
     @Override
-    public String join()
+    public String getJoinCondition()
     {
         return "JOIN Mesto m ON (m.idMesto = k.idMesto)";
     }
 
     @Override
-    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
+    public List<AbstractDomainObject> getList(ResultSet rs) throws SQLException
     {
         List<AbstractDomainObject> lista = new ArrayList<>();
         while (rs.next())
@@ -109,39 +109,39 @@ public class Kupac implements AbstractDomainObject
     }
 
     @Override
-    public String koloneZaInsert()
+    public String getInsertColumns()
     {
         return "(ime, prezime, telefon, idMesto)";
     }
 
     @Override
-    public String vrednostiZaInsert()
+    public String getInsertPlaceholders()
     {
         return "?, ?, ?, ?";
     }
 
     @Override
-    public String vrednostiZaUpdate()
+    public String getUpdatePlaceholders()
     {
         return "ime = ?, prezime = ?, telefon = ?, idMesto = ?";
     }
 
     @Override
-    public String uslov()
+    public String getConditionPlaceholder()
     {
         return "idKupac = ?";
     }
 
     @Override
-    public String uslovZaSelect()
+    public String getSelectConditionPlaceholder()
     {
-        return "";
+        return " ORDER BY prezime,ime ASC ";
     }
 
     @Override
-    public String uslovZaFilter()
+    public String getFilterConditionPlaceholder()
     {
-        return "WHERE LOWER(CONCAT(ime, ' ', prezime)) LIKE ?";
+        return " LOWER(CONCAT(ime, ' ', prezime)) LIKE ? ";
     }
 
     @Override
@@ -161,6 +161,31 @@ public class Kupac implements AbstractDomainObject
         ps.setString(3, telefon);
         ps.setLong(4, mesto.getIdMesto());
         ps.setLong(5, idKupac);
+    }
+    
+    @Override
+    public void prepareCondition(PreparedStatement ps) throws SQLException
+    {
+        ps.setLong(1, idKupac);
+    }
+
+    @Override
+    public void prepareSelect(PreparedStatement ps) throws SQLException
+    {
+    }
+
+    @Override
+    public void prepareFilter(PreparedStatement ps) throws SQLException
+    {
+        String filterValue = "";
+        if (ime != null && !ime.isEmpty())
+            filterValue += ime;
+        if (prezime != null && !prezime.isEmpty())
+            filterValue += " " + prezime;
+        
+        filterValue +="%";
+        
+        ps.setString(1, filterValue.toLowerCase());
     }
 
 
@@ -213,5 +238,17 @@ public class Kupac implements AbstractDomainObject
     public void setMesto(Mesto mesto)
     {
         this.mesto = mesto;
+    }
+
+    @Override
+    public String getExistenceConditionPlaceholder()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void prepareExistenceCondition(PreparedStatement ps) throws SQLException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

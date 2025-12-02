@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -37,23 +38,51 @@ public class StavkaRacuna implements AbstractDomainObject
     public StavkaRacuna()
     {
     }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final StavkaRacuna other = (StavkaRacuna) obj;
+        return Objects.equals(this.caj, other.caj);
+    }
+    
+    
     
 
     //=== Implement ADO methods ===
     @Override
-    public String nazivTabele()
+    public String getTableName()
     {
         return " stavkaracuna ";
     }
 
     @Override
-    public String alijas()
+    public String getAlias()
     {
         return " sr ";
     }
 
     @Override
-    public String join()
+    public String getJoinCondition()
     {
         return " JOIN caj c ON (c.idCaj = sr.idCaj)\n"
                 + "JOIN racun r ON (r.idRacun = sr.idRacun)\n"
@@ -63,7 +92,7 @@ public class StavkaRacuna implements AbstractDomainObject
     }
 
     @Override
-    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
+    public List<AbstractDomainObject> getList(ResultSet rs) throws SQLException
     {
         List<AbstractDomainObject> lista = new ArrayList<>();
         
@@ -95,41 +124,41 @@ public class StavkaRacuna implements AbstractDomainObject
     }
 
     @Override
-    public String koloneZaInsert()
+    public String getInsertColumns()
     {
         return " (idRacun, rb, kolicina, cena, iznos, idCaj) ";
     }
 
     @Override
-    public String vrednostiZaInsert()
+    public String getInsertPlaceholders()
     {
         return " ?, ?, ?, ?, ?, ? ";
     }
 
     @Override
-    public String vrednostiZaUpdate()
+    public String getUpdatePlaceholders()
     {
         return "";
     }
 
     @Override
-    public String uslov()
+    public String getConditionPlaceholder()
     {
-        return " idRacun = " + racun.getIdRacun();
+        return " idRacun = ? ";
     }
 
     @Override
-    public String uslovZaSelect()
+    public String getSelectConditionPlaceholder()
     {
         if (racun != null) 
         {
-            return " WHERE r.idRacun = " + racun.getIdRacun();
+            return " WHERE r.idRacun = ? ";
         }
-        return " WHERE c.idCaj = " + caj.getIdCaj();
+        return " WHERE c.idCaj = ? ";
     }
 
     @Override
-    public String uslovZaFilter()
+    public String getFilterConditionPlaceholder()
     {
         return "";
     }
@@ -142,13 +171,38 @@ public class StavkaRacuna implements AbstractDomainObject
         ps.setInt(3, kolicina);
         ps.setDouble(4, cena);
         ps.setDouble(5, iznos);
-        ps.setLong(5, caj.getIdCaj());
+        ps.setLong(6, caj.getIdCaj());
     }
 
     @Override
     public void prepareUpdate(PreparedStatement ps) throws SQLException
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public void prepareCondition(PreparedStatement ps) throws SQLException
+    {
+        ps.setLong(1, racun.getIdRacun());
+    }
+
+    @Override
+    public void prepareSelect(PreparedStatement ps) throws SQLException
+    {
+        if (racun != null) 
+        {
+            ps.setLong(1, racun.getIdRacun());
+        }
+        else
+        {
+            
+            ps.setLong(1, caj.getIdCaj());
+        }
+    }
+
+    @Override
+    public void prepareFilter(PreparedStatement ps) throws SQLException
+    {
     }
     
     
@@ -211,6 +265,18 @@ public class StavkaRacuna implements AbstractDomainObject
     public void setCaj(Caj caj)
     {
         this.caj = caj;
+    }
+
+    @Override
+    public String getExistenceConditionPlaceholder()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void prepareExistenceCondition(PreparedStatement ps) throws SQLException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

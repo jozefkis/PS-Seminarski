@@ -38,7 +38,7 @@ public abstract class AbstractSO
         }
         finally
         {
-            closeConection();
+            closeConnection();
         }
     }
 
@@ -67,7 +67,7 @@ public abstract class AbstractSO
         }   
     }
     
-    public void closeConection() throws SQLException
+    public void closeConnection() throws SQLException
     {
         if (connection != null && !connection.isClosed())
             connection.close();

@@ -12,20 +12,10 @@ public enum Operation
 {
     LOGIN,
     LOGOUT,
-    
     GET_ALL_TRAVAR,
-    
-    
-    
-    GET_ALL_CAJ,
-    
-    
-    GET_ALL_KUPAC,
-    FILTER_KUPAC,
-    UPDATE_KUPAC,
-    DELETE_KUPAC,
-    ADD_KUPAC,
-    
+    GET_ALL_KUPAC, ADD_KUPAC, FILTER_KUPAC, UPDATE_KUPAC, DELETE_KUPAC,
     GET_ALL_MESTO,
-    TEST;
+    TEST, 
+    GET_ALL_CAJ, ADD_CAJ, UPDATE_CAJ, DELETE_CAJ, FILTER_CAJ,
+    ADD_RACUN, GET_ALL_RACUN;
 }

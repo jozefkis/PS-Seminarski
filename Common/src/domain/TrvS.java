@@ -36,26 +36,26 @@ public class TrvS implements AbstractDomainObject
     
     //=== Implemented ADO methods
     @Override
-    public String nazivTabele()
+    public String getTableName()
     {
         return " trvs ";
     }
 
     @Override
-    public String alijas()
+    public String getAlias()
     {
         return " ts ";
     }
 
     @Override
-    public String join()
+    public String getJoinCondition()
     {
         return " JOIN travar t ON (t.idTravar = ts.idTravar)\n"
                 + "JOIN sertifikat s ON (s.idSertifikat = ts.idSertifikat) ";
     }
 
     @Override
-    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
+    public List<AbstractDomainObject> getList(ResultSet rs) throws SQLException
     {
         List<AbstractDomainObject> lista = new ArrayList<>();
         
@@ -76,37 +76,37 @@ public class TrvS implements AbstractDomainObject
     }
 
     @Override
-    public String koloneZaInsert()
+    public String getInsertColumns()
     {
         return " (idTravar, idSertifikat, datumIzdavanja) ";
     }
 
     @Override
-    public String vrednostiZaInsert()
+    public String getInsertPlaceholders()
     {
         return " ?, ?, ? ";
     }
 
     @Override
-    public String vrednostiZaUpdate()
+    public String getUpdatePlaceholders()
     {
         return "";
     }
 
     @Override
-    public String uslov()
+    public String getConditionPlaceholder()
     {
-        return " idTravar = " + travar.getIdTravar();
+        return " idTravar = ? ";
     }
 
     @Override
-    public String uslovZaSelect()
+    public String getSelectConditionPlaceholder()
     {
         return "";
     }
 
     @Override
-    public String uslovZaFilter()
+    public String getFilterConditionPlaceholder()
     {
         return "";
     }
@@ -123,6 +123,22 @@ public class TrvS implements AbstractDomainObject
     public void prepareUpdate(PreparedStatement ps) throws SQLException
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public void prepareCondition(PreparedStatement ps) throws SQLException
+    {
+        ps.setLong(1, travar.getIdTravar());
+    }
+
+    @Override
+    public void prepareSelect(PreparedStatement ps) throws SQLException
+    {
+    }
+
+    @Override
+    public void prepareFilter(PreparedStatement ps) throws SQLException
+    {
     }
     
     
@@ -155,6 +171,18 @@ public class TrvS implements AbstractDomainObject
     public void setDatumIzdavanja(LocalDate datumIzdavanja)
     {
         this.datumIzdavanja = datumIzdavanja;
+    }
+
+    @Override
+    public String getExistenceConditionPlaceholder()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void prepareExistenceCondition(PreparedStatement ps) throws SQLException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }

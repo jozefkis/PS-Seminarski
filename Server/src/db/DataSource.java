@@ -20,12 +20,9 @@ public class DataSource
     
     private DataSource()
     {
-        {
-            HikariConfig config = new HikariConfig("hikari.properties");
-            System.out.println(config.isAutoCommit());
-            hikariDataSource = new HikariDataSource(config);
-        }
-        
+        HikariConfig config = new HikariConfig("hikari.properties");
+        System.out.println(config.isAutoCommit());
+        hikariDataSource = new HikariDataSource(config);
     }
     
     public static DataSource getInstance()

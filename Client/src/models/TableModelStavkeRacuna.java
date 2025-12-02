@@ -4,9 +4,9 @@
  */
 package models;
 
+import domain.Racun;
 import domain.StavkaRacuna;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -16,12 +16,13 @@ import javax.swing.table.AbstractTableModel;
 public class TableModelStavkeRacuna extends AbstractTableModel
 {
     private final String[] columnNames = {"rb", "Čaj", "Cena", "Količina", "Iznos"};
-    private List<StavkaRacuna> stavke;
+    private final Racun racun;
     private int rb;
 
     public TableModelStavkeRacuna()
     {
-        stavke = new ArrayList<>();
+        racun = new Racun();
+        racun.setStavkeRacuna(new ArrayList<>());
         rb = 0;
     }
     
@@ -29,7 +30,7 @@ public class TableModelStavkeRacuna extends AbstractTableModel
     @Override
     public int getRowCount()
     {
-        return stavke.size();
+        return racun.getStavkeRacuna().size();
     }
 
     @Override
@@ -41,7 +42,7 @@ public class TableModelStavkeRacuna extends AbstractTableModel
     @Override
     public Object getValueAt(int rowIndex, int columnIndex)
     {
-        StavkaRacuna sr = stavke.get(rowIndex);
+        StavkaRacuna sr = racun.getStavkeRacuna().get(rowIndex);
         
         switch(columnIndex)
         {
@@ -65,19 +66,20 @@ public class TableModelStavkeRacuna extends AbstractTableModel
     {
         return columnNames[column];
     }
-
-    public List<StavkaRacuna> getStavke()
+    
+    public Racun getRacun()
     {
-        return stavke;
+        return racun;
     }
     
     public boolean addStavka(StavkaRacuna sr)
     {
-        if (stavke.contains(sr))
+        if (racun.getStavkeRacuna().contains(sr))
             return false;
         
+        sr.setRacun(racun);
         sr.setRb(++rb);
-        stavke.add(sr);
+        racun.addStavka(sr);
         fireTableDataChanged();
         
         return true;
@@ -85,14 +87,14 @@ public class TableModelStavkeRacuna extends AbstractTableModel
     
     public boolean removeStavka(StavkaRacuna sr)
     {
-        if (stavke.contains(sr))
+        if (racun.getStavkeRacuna().contains(sr))
         {
             int rbToRemove = sr.getRb();
-            stavke.remove(sr);
+            racun.removeStavka(sr);
             
-            for (int i = rbToRemove - 1; i < stavke.size(); i++)
+            for (int i = rbToRemove - 1; i < racun.getStavkeRacuna().size(); i++)
             {
-                StavkaRacuna s = stavke.get(i);
+                StavkaRacuna s = racun.getStavkeRacuna().get(i);
                 s.setRb(s.getRb() - 1);
             }
             --rb;
@@ -103,5 +105,13 @@ public class TableModelStavkeRacuna extends AbstractTableModel
         
         return false;
     }
+    
+    public void clearStavke()
+    {
+        racun.getStavkeRacuna().clear();
+        fireTableDataChanged();
+    }
+
+    
     
 }

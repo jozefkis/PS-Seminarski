@@ -5,7 +5,8 @@
 package forms;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
-import java.awt.Color;
+import coordinator.ServerCoordinator;
+import forms.models.TableModelLoggedTravar;
 import java.awt.HeadlessException;
 import java.io.IOException;
 import javax.swing.JOptionPane;
@@ -28,7 +29,11 @@ public class ServerForm extends javax.swing.JFrame
     public ServerForm()
     {
         initComponents();
+        ServerCoordinator.getInstance().setServerForm(this);
+        
         btnStopServer.setEnabled(false);
+        tblOnlineTravari.setModel(new TableModelLoggedTravar());
+        
         setTitle("Server form");
         setLocationRelativeTo(null);
     }
@@ -48,6 +53,8 @@ public class ServerForm extends javax.swing.JFrame
         btnStartServer = new javax.swing.JButton();
         btnStopServer = new javax.swing.JButton();
         lblStatus = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblOnlineTravari = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -88,28 +95,39 @@ public class ServerForm extends javax.swing.JFrame
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(btnStartServer)
-                        .addGap(35, 35, 35)
-                        .addComponent(btnStopServer))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(152, 152, 152)
-                        .addComponent(lblStatus)))
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addGap(155, 155, 155)
+                .addComponent(lblStatus)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(90, Short.MAX_VALUE)
+                .addComponent(btnStartServer)
+                .addGap(35, 35, 35)
+                .addComponent(btnStopServer)
+                .addGap(85, 85, 85))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(53, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(47, 47, 47)
                 .addComponent(lblStatus)
-                .addGap(44, 44, 44)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnStartServer)
                     .addComponent(btnStopServer))
-                .addGap(129, 129, 129))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
+
+        tblOnlineTravari.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+
+            },
+            new String []
+            {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tblOnlineTravari);
 
         jMenu1.setText("Config");
 
@@ -131,9 +149,11 @@ public class ServerForm extends javax.swing.JFrame
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -141,6 +161,8 @@ public class ServerForm extends javax.swing.JFrame
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -152,7 +174,7 @@ public class ServerForm extends javax.swing.JFrame
         startServer();
     }//GEN-LAST:event_btnStartServerActionPerformed
 
-    private void startServer() throws HeadlessException
+    private void startServer()
     {
         if (thread == null || !thread.isAlive())
         {
@@ -234,6 +256,11 @@ public class ServerForm extends javax.swing.JFrame
         stopServer();
         System.exit(0);
     }
+    
+    public void refreshTable()
+    {
+        ((TableModelLoggedTravar)tblOnlineTravari.getModel()).setList(ServerCoordinator.getInstance().getLoggedTravari());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnStartServer;
@@ -243,6 +270,8 @@ public class ServerForm extends javax.swing.JFrame
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblStatus;
+    private javax.swing.JTable tblOnlineTravari;
     // End of variables declaration//GEN-END:variables
 }

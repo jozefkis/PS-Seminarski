@@ -25,7 +25,7 @@ public class Racun implements AbstractDomainObject
     private Kupac kupac;
     private List<StavkaRacuna> stavkeRacuna;
 
-    public Racun(long idRacun, LocalDateTime datum, double ukupanIznos, Travar travar, Kupac kupac, ArrayList<StavkaRacuna> stavkeRacuna)
+    public Racun(long idRacun, LocalDateTime datum, double ukupanIznos, Travar travar, Kupac kupac, List<StavkaRacuna> stavkeRacuna)
     {
         this.idRacun = idRacun;
         this.datum = datum;
@@ -42,27 +42,27 @@ public class Racun implements AbstractDomainObject
     
     //=== Implemented ADO methods ===
     @Override
-    public String nazivTabele()
+    public String getTableName()
     {
         return " racun ";
     }
 
     @Override
-    public String alijas()
+    public String getAlias()
     {
         return " r ";
     }
 
     @Override
-    public String join()
+    public String getJoinCondition()
     {
         return " JOIN travar t ON (t.idTravar = r.idTravar)\n"
                 + "JOIN kupac k ON (k.idKupac = r.idKupac)\n"
-                + "JOIN mesto m oN (m.idMesto = k.idMesto)";
+                + "JOIN mesto m oN (m.idMesto = k.idMesto)\n";
     }
 
     @Override
-    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
+    public List<AbstractDomainObject> getList(ResultSet rs) throws SQLException
     {
         List<AbstractDomainObject> lista = new ArrayList<>();
         
@@ -87,41 +87,48 @@ public class Racun implements AbstractDomainObject
     }
 
     @Override
-    public String koloneZaInsert()
+    public String getInsertColumns()
     {
         return " (datum, ukupanIznos, idTravar, idKupac) ";
     }
 
     @Override
-    public String vrednostiZaInsert()
+    public String getInsertPlaceholders()
     {
         return " ?, ?, ?, ? ";
     }
 
     @Override
-    public String vrednostiZaUpdate()
+    public String getUpdatePlaceholders()
     {
         return " datum = ?, ukupanIznos = ? ";
 
     }
 
     @Override
-    public String uslov()
+    public String getConditionPlaceholder()
     {
-        return "idRacun = " + idRacun;
+        return "idRacun = ? ";
     }
 
     @Override
-    public String uslovZaSelect()
+    public String getSelectConditionPlaceholder()
     {
-        if(kupac != null){
-            return " WHERE k.idKupac = " + kupac.getIdKupac();
+        if (this.kupac != null && this.travar != null){
+            return " WHERE k.idKupac = ? AND t.idTravar = ? ";
         }
+        
+        if (this.kupac != null)
+            return " WHERE k.idKupac = ? ";
+        
+        if (this.travar != null)
+            return " WHERE t.idTravar = ? ";
+        
         return "";
     }
 
     @Override
-    public String uslovZaFilter()
+    public String getFilterConditionPlaceholder()
     {
         return "";
     }
@@ -131,8 +138,8 @@ public class Racun implements AbstractDomainObject
     {
         ps.setTimestamp(1, Timestamp.valueOf(datum));
         ps.setDouble(2, ukupanIznos);
-        ps.setDouble(3, travar.getIdTravar());
-        ps.setDouble(4, kupac.getIdKupac());
+        ps.setLong(3, travar.getIdTravar());
+        ps.setLong(4, kupac.getIdKupac());
         
     }
 
@@ -141,6 +148,40 @@ public class Racun implements AbstractDomainObject
     {
         ps.setTimestamp(1, Timestamp.valueOf(datum));
         ps.setDouble(2, ukupanIznos);
+        ps.setLong(3, idRacun);
+    }
+    
+    @Override
+    public void prepareCondition(PreparedStatement ps) throws SQLException
+    {
+        ps.setLong(1, idRacun);
+    }
+
+    @Override
+    public void prepareSelect(PreparedStatement ps) throws SQLException
+    {
+        if (kupac != null && travar != null)
+        {
+            ps.setLong(1, kupac.getIdKupac());
+            ps.setLong(2, travar.getIdTravar());
+            
+            return;
+        }
+        
+        if (kupac != null)
+        {
+            ps.setLong(1, kupac.getIdKupac());
+            return;
+        }
+        
+        if (travar != null)
+            ps.setLong(1, travar.getIdTravar());
+            
+    }
+
+    @Override
+    public void prepareFilter(PreparedStatement ps) throws SQLException
+    {
     }
     
     
@@ -207,15 +248,27 @@ public class Racun implements AbstractDomainObject
     
     
     
-    public void dodajStavku(StavkaRacuna stavka)
+    public void addStavka(StavkaRacuna stavka)
     {
         stavkeRacuna.add(stavka);
         ukupanIznos += stavka.getIznos();
     }
     
-    public void izbaciStavku(StavkaRacuna stavka)
+    public void removeStavka(StavkaRacuna stavka)
     {
         stavkeRacuna.remove(stavka);
         ukupanIznos -= stavka.getIznos();
+    }
+
+    @Override
+    public String getExistenceConditionPlaceholder()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void prepareExistenceCondition(PreparedStatement ps) throws SQLException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

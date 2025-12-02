@@ -5,13 +5,15 @@
 package forms;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import controller.ClientController;
 import domain.Travar;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 /**
  *
@@ -21,19 +23,45 @@ public class LoginForm extends javax.swing.JFrame
 {
 
     /**
-     * Creates new form LoginForm
+     * Creates new form NewLogin
      */
     public LoginForm()
     {
         initComponents();
-        setTitle("Login Form");
-        //setSize(new Dimension(1200, 700));
+
+        ImageIcon originalImageIcon = new ImageIcon("images/tea_login.jpg");
+        if (originalImageIcon.getImageLoadStatus() == java.awt.MediaTracker.COMPLETE)
+        {
+            Image image = originalImageIcon.getImage().getScaledInstance(300, 420, Image.SCALE_SMOOTH);
+
+            ImageIcon scaledImageIcon = new ImageIcon(image);
+
+            lblImg.setIcon(scaledImageIcon);
+        }
+        else
+        {
+            lblImg.setText("Nije pronađena slika: tea_login.jpg");
+        }
+
+        setTitle("Log in form");
         setLocationRelativeTo(null);
-        
-        tfUsername.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your username");
-        pfPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your password");
-        
-        pfPassword.putClientProperty(FlatClientProperties.STYLE, "showRevealButton:true");
+        setSize(576, 420);
+        setResizable(false);
+
+        lblH1.setForeground(new Color(0x7da840));
+
+        tfUsername.putClientProperty("JTextField.placeholderText", "Unesite korisničko ime");
+        tfUsername.putClientProperty("JTextField.showClearButton", true);
+        tfUsername.updateUI();
+
+        pfPass.putClientProperty("JTextField.placeholderText", "Unesite lozinku");
+        pfPass.putClientProperty(FlatClientProperties.STYLE, "showRevealButton:true");
+
+        btnLogin.putClientProperty("JButton.buttonType", "roundRect");
+        //btnLogin.putClientProperty("JButton.arc", 25);
+        btnLogin.setBackground(new Color(125, 168, 64));
+        btnLogin.setForeground(Color.WHITE);
+        btnLogin.setFont(new Font("SansSerif", Font.BOLD, 14));
     }
 
     /**
@@ -46,31 +74,23 @@ public class LoginForm extends javax.swing.JFrame
     private void initComponents()
     {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        btnLogin = new javax.swing.JButton();
         tfUsername = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        pfPassword = new javax.swing.JPasswordField();
-        btnLogin = new javax.swing.JButton();
+        lblH1 = new javax.swing.JLabel();
+        pfPass = new javax.swing.JPasswordField();
+        lblH2 = new javax.swing.JLabel();
+        lblImg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("username");
-
-        tfUsername.setText("anci");
-        tfUsername.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                tfUsernameActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setText("password");
-
-        pfPassword.setText("anci");
+        jLabel1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        jLabel1.setText("Username:");
 
         btnLogin.setText("Log in");
+        btnLogin.setMargin(new java.awt.Insets(5, 14, 5, 14));
         btnLogin.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -79,81 +99,90 @@ public class LoginForm extends javax.swing.JFrame
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(107, 107, 107)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+        tfUsername.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        tfUsername.setMargin(new java.awt.Insets(3, 6, 3, 6));
+        tfUsername.setPreferredSize(new java.awt.Dimension(200, 28));
+
+        jLabel2.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        jLabel2.setText("Password:");
+
+        lblH1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblH1.setText("Dobrodošli!");
+
+        pfPass.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        pfPass.setMargin(new java.awt.Insets(3, 6, 3, 6));
+        pfPass.setPreferredSize(new java.awt.Dimension(200, 28));
+
+        lblH2.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        lblH2.setText("Ulogujte se da biste nastavili.");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblH2)
+                    .addComponent(lblH1)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(tfUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
-                    .addComponent(pfPassword)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(74, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(pfPass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(tfUsername, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(34, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(91, 91, 91)
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(lblH1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblH2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(31, 31, 31)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(pfPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59)
                 .addComponent(btnLogin)
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addGap(19, 19, 19))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        getContentPane().add(jPanel3, java.awt.BorderLayout.LINE_START);
+        getContentPane().add(lblImg, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void tfUsernameActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_tfUsernameActionPerformed
-    {//GEN-HEADEREND:event_tfUsernameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfUsernameActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnLoginActionPerformed
     {//GEN-HEADEREND:event_btnLoginActionPerformed
         try
         {
             String username = tfUsername.getText();
-            String password = String.valueOf(pfPassword.getPassword());
-            
+            String password = String.valueOf(pfPass.getPassword());
+
             Travar t = new Travar();
             t.setUsername(username);
             t.setPassword(password);
-            
+
             System.out.println(t.getUsername() + " " + t.getPassword());
-            
+
             t = ClientController.getInstance().login(t);
             new MainForm(t);
             this.dispose();
-            
+
         }
         catch (Exception ex)
         {
-            JOptionPane.showMessageDialog(this, "Login unsucessful!\n"+ex.getMessage(), "Login error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Login unsucessful!\n" + ex.getMessage(), "Login error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
@@ -167,16 +196,26 @@ public class LoginForm extends javax.swing.JFrame
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        
 
-        /* Create and display the form */
+
+ /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable()
         {
             public void run()
             {
+                Color fokusBoja = new Color(0x7da840);
+                UIManager.put("Component.accentColor", fokusBoja);
+                UIManager.put("Component.focusColor", fokusBoja);
+                UIManager.put("ComboBox.selectionBackground", fokusBoja);
+                UIManager.put("MenuItem.selectionBackground", fokusBoja);
+
+                UIManager.put("ComboBox.buttonBackground", fokusBoja);
                 
-                
-                FlatLightLaf.setup();
+
+                javax.swing.UIManager.put("TextComponent.arc", 15);
+
+                FlatMacLightLaf.setup();
+
                 new LoginForm().setVisible(true);
             }
         });
@@ -186,8 +225,11 @@ public class LoginForm extends javax.swing.JFrame
     private javax.swing.JButton btnLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField pfPassword;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblH1;
+    private javax.swing.JLabel lblH2;
+    private javax.swing.JLabel lblImg;
+    private javax.swing.JPasswordField pfPass;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
 }

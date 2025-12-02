@@ -8,24 +8,37 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Ra&#x10d;un"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="mitmSearchRacun">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Pretraga ra&#x10d;una"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mitmSearchRacunActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Kupac"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+            <MenuItem class="javax.swing.JMenuItem" name="mitmAddKupac">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Novi kupac"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mitmAddKupacActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+            <MenuItem class="javax.swing.JMenuItem" name="mitmSearchKupac">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Pretraga kupaca"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mitmSearchKupacActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -33,6 +46,24 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x10c;aj"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="mitmAddCaj">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Novi &#x10d;aj"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mitmAddCajActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mitmSearchCaj">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Pretraga &#x10d;ajeva"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mitmSearchCajActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
         </Menu>
       </SubComponents>
     </Menu>
@@ -68,12 +99,10 @@
               <Component id="jPanel1" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="-2" pref="335" max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="274" max="-2" attributes="0"/>
               <Component id="lblTest" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="btnSndTest" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -81,10 +110,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblTest" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnSndTest" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="lblTest" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -118,9 +144,9 @@
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="comboTravari" pref="211" max="32767" attributes="0"/>
                                   <Component id="tfUkupanIznos" alignment="0" min="-2" pref="126" max="-2" attributes="0"/>
-                                  <Component id="comboKupci" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="comboKupci" alignment="0" pref="287" max="32767" attributes="0"/>
+                                  <Component id="comboTravari" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="jPanel2" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -231,12 +257,7 @@
                 <Component class="javax.swing.JTable" name="tblStavke">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="4" rowCount="4">
-                        <Column editable="true" title="Title 1" type="java.lang.Object"/>
-                        <Column editable="true" title="Title 2" type="java.lang.Object"/>
-                        <Column editable="true" title="Title 3" type="java.lang.Object"/>
-                        <Column editable="true" title="Title 4" type="java.lang.Object"/>
-                      </Table>
+                      <Table columnCount="0" rowCount="0"/>
                     </Property>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Default Cursor"/>
@@ -276,11 +297,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Izbrisi stavku"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIzbrisiStavkuActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnDodajStavku">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Dodaj stavku"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDodajStavkuActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -288,6 +315,9 @@
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[250, 25]"/>
             </Property>
           </Properties>
           <AuxValues>
@@ -307,6 +337,7 @@
         <Component class="javax.swing.JTextField" name="tfUkupanIznos">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
@@ -318,11 +349,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Sa&#x10d;uvaj ra&#x10d;un"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSacuvajRacunActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="comboKupci">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[250, 25]"/>
             </Property>
           </Properties>
           <AuxValues>
@@ -335,14 +372,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnSndTest">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="test"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSndTestActionPerformed"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

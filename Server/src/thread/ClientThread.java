@@ -9,7 +9,10 @@ import communication.Request;
 import communication.Response;
 import communication.Sender;
 import controller.ServerController;
+import coordinator.ServerCoordinator;
+import domain.Caj;
 import domain.Kupac;
+import domain.Racun;
 import domain.Travar;
 import java.io.IOException;
 import java.net.Socket;
@@ -22,12 +25,17 @@ public class ClientThread implements Runnable
 {
     private Socket socket;
     private volatile boolean logoutRequested = false;
+    private Travar loggedTravar;
 
     public ClientThread(Socket socket)
     {
         this.socket = socket;
     }
 
+    public Travar getLoggedTravar()
+    {
+        return loggedTravar;
+    }
     
     @Override
     public void run()
@@ -51,6 +59,8 @@ public class ClientThread implements Runnable
         }
         finally
         {
+            ServerCoordinator.getInstance().removeClient(this);
+            
             try 
             {
                 if (socket != null && !socket.isClosed()) 
@@ -75,6 +85,8 @@ public class ClientThread implements Runnable
             {
                 case LOGIN:
                     Travar travar = ServerController.getInstance().login((Travar) req.getArgument());
+                    loggedTravar = travar;
+                    ServerCoordinator.getInstance().notifyForm();
                     response.setResult(travar);
                     break;
                 case LOGOUT:
@@ -84,9 +96,6 @@ public class ClientThread implements Runnable
                     break;
                 case GET_ALL_TRAVAR:
                     response.setResult(ServerController.getInstance().getAllTravar());
-                    break;
-                case TEST:
-                    response.setResult("ODGOVOR USPESAN");
                     break;
                 case GET_ALL_KUPAC:
                     response.setResult(ServerController.getInstance().getAllKupac());
@@ -98,7 +107,7 @@ public class ClientThread implements Runnable
                     response.setResult(ServerController.getInstance().getAllMesto());
                     break;
                 case FILTER_KUPAC:
-                    response.setResult(ServerController.getInstance().filterKupac((String) req.getArgument()));
+                    response.setResult(ServerController.getInstance().filterKupac((Kupac) req.getArgument()));
                     break;
                 case UPDATE_KUPAC:
                     ServerController.getInstance().updateKupac((Kupac) req.getArgument());
@@ -106,7 +115,29 @@ public class ClientThread implements Runnable
                 case DELETE_KUPAC:
                     ServerController.getInstance().deleteKupac((Kupac) req.getArgument());
                     break;
-                    
+                case ADD_KUPAC:
+                    response.setResult(ServerController.getInstance().addKupac((Kupac) req.getArgument()));
+                    break;
+                case ADD_CAJ:
+                    response.setResult(ServerController.getInstance().addCaj((Caj) req.getArgument()));
+                    break;
+                case FILTER_CAJ:
+                    response.setResult(ServerController.getInstance().filterCaj((Caj) req.getArgument()));
+                    break;
+                case DELETE_CAJ:
+                    ServerController.getInstance().deleteCaj((Caj) req.getArgument());
+                    break;
+                case UPDATE_CAJ:
+                    ServerController.getInstance().updateCaj((Caj) req.getArgument());
+                    break;
+                case ADD_RACUN:
+                    response.setResult(ServerController.getInstance().addRacun((Racun) req.getArgument()));
+                    break;
+                case GET_ALL_RACUN:
+                    Racun r = (Racun) req.getArgument();
+                    System.out.println("Racun: " + r.getTravar());
+                    response.setResult(ServerController.getInstance().getAllRacun(r));
+                    break;
             }
         }
         catch (Exception e)

@@ -25,11 +25,15 @@ CREATE TABLE `caj` (
   `naziv` varchar(30) NOT NULL,
   `cena` decimal(10,2) unsigned NOT NULL CHECK (`cena` > 0),
   `korisnickoUputstvo` varchar(200) NOT NULL,
-  `opis` varchar(100) NOT NULL,
+  `opis` varchar(200) NOT NULL,
   PRIMARY KEY (`idCaj`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `caj` */
+
+insert  into `caj`(`idCaj`,`naziv`,`cena`,`korisnickoUputstvo`,`opis`) values 
+(1,'Wellness',3000.00,'*DODATI*','*DODATI*'),
+(2,'Protiv prehlade',2500.00,'*DODATI*','*DODATI*');
 
 /*Table structure for table `kupac` */
 
@@ -45,12 +49,16 @@ CREATE TABLE `kupac` (
   UNIQUE KEY `unique_telefon` (`telefon`),
   KEY `idMesto` (`idMesto`),
   CONSTRAINT `kupac_ibfk_1` FOREIGN KEY (`idMesto`) REFERENCES `mesto` (`idMesto`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `kupac` */
 
 insert  into `kupac`(`idKupac`,`ime`,`prezime`,`telefon`,`idMesto`) values 
-(1,'Ana','Anic','0601112222',1);
+(3,'Žika','Žikić','0648889999',3),
+(5,'Miloš','Milošević','0657770907',2),
+(6,'Marko','Marković','0655055005',1),
+(7,'Petar','Petrovic','0659990909',1),
+(10,'Dusan','Spasic','0659099009',2);
 
 /*Table structure for table `mesto` */
 
@@ -60,13 +68,14 @@ CREATE TABLE `mesto` (
   `idMesto` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `naziv` varchar(50) NOT NULL,
   PRIMARY KEY (`idMesto`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `mesto` */
 
 insert  into `mesto`(`idMesto`,`naziv`) values 
 (1,'Beograd'),
-(2,'Novi Sad');
+(2,'Novi Sad'),
+(3,'Niš');
 
 /*Table structure for table `racun` */
 
@@ -75,7 +84,7 @@ DROP TABLE IF EXISTS `racun`;
 CREATE TABLE `racun` (
   `idRacun` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `datum` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `ukupanIznos` decimal(15,2) NOT NULL CHECK ('ukupanIznos' > 0),
+  `ukupanIznos` decimal(15,2) NOT NULL CHECK (`ukupanIznos` > 0),
   `idTravar` bigint(20) unsigned NOT NULL,
   `idKupac` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`idRacun`),
@@ -83,9 +92,12 @@ CREATE TABLE `racun` (
   KEY `idKupac` (`idKupac`),
   CONSTRAINT `racun_ibfk_1` FOREIGN KEY (`idTravar`) REFERENCES `travar` (`idTravar`),
   CONSTRAINT `racun_ibfk_2` FOREIGN KEY (`idKupac`) REFERENCES `kupac` (`idKupac`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `racun` */
+
+insert  into `racun`(`idRacun`,`datum`,`ukupanIznos`,`idTravar`,`idKupac`) values 
+(1,'2025-11-28 15:43:52',6000.00,3,10);
 
 /*Table structure for table `sertifikat` */
 
@@ -106,9 +118,9 @@ DROP TABLE IF EXISTS `stavkaracuna`;
 
 CREATE TABLE `stavkaracuna` (
   `idRacun` bigint(20) unsigned NOT NULL,
-  `rb` int(11) NOT NULL DEFAULT 1 CHECK ('rb' > 0),
-  `kolicina` int(11) NOT NULL CHECK ('kolicina' > 0),
-  `cena` decimal(10,2) NOT NULL CHECK ('cena' > 0),
+  `rb` int(11) NOT NULL DEFAULT 1 CHECK (`rb` > 0),
+  `kolicina` int(11) NOT NULL CHECK (`kolicina` > 0),
+  `cena` decimal(10,2) NOT NULL CHECK (`cena` > 0),
   `iznos` decimal(10,2) NOT NULL,
   `idCaj` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`idRacun`,`rb`),
@@ -118,6 +130,9 @@ CREATE TABLE `stavkaracuna` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `stavkaracuna` */
+
+insert  into `stavkaracuna`(`idRacun`,`rb`,`kolicina`,`cena`,`iznos`,`idCaj`) values 
+(1,1,2,3000.00,6000.00,1);
 
 /*Table structure for table `travar` */
 
@@ -133,12 +148,13 @@ CREATE TABLE `travar` (
   PRIMARY KEY (`idTravar`),
   UNIQUE KEY `unique_telefon` (`telefon`),
   UNIQUE KEY `unique_korisnickoIme` (`korisnickoIme`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `travar` */
 
 insert  into `travar`(`idTravar`,`ime`,`prezime`,`telefon`,`korisnickoIme`,`sifra`) values 
-(1,'Pera','Perić','0604445555','perape','perape');
+(1,'Pera','Perić','0604445555','perape','perape'),
+(3,'Ana','Anić','0601115555','anci','anci');
 
 /*Table structure for table `trvs` */
 

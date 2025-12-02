@@ -185,22 +185,14 @@ public class DBConfiguration extends javax.swing.JDialog
         }
         catch (NumberFormatException numberFormatException)
         {
-            JOptionPane.showMessageDialog(
-            this, 
-            "Port must be an integer.",
-            "Error", // Dialog title
-            JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Port must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
             tfPort.setText("");
             return;
         }
         
         if (dbName == null || dbName.isEmpty() || dbName.isBlank())
         {
-            JOptionPane.showMessageDialog(
-            this, 
-            "Database name is missing.",
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Database name is missing.", "Error", JOptionPane.ERROR_MESSAGE);
             tfDBName.setText("");
             return;
         }

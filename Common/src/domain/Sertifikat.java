@@ -34,25 +34,25 @@ public class Sertifikat implements AbstractDomainObject
     
     //=== Implemented ADO methods ===
     @Override
-    public String nazivTabele()
+    public String getTableName()
     {
         return " sertifikat ";
     }
 
     @Override
-    public String alijas()
+    public String getAlias()
     {
         return " s ";
     }
 
     @Override
-    public String join()
+    public String getJoinCondition()
     {
         return "";
     }
 
     @Override
-    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
+    public List<AbstractDomainObject> getList(ResultSet rs) throws SQLException
     {
         List<AbstractDomainObject> lista = new ArrayList<>();
         
@@ -61,43 +61,42 @@ public class Sertifikat implements AbstractDomainObject
             Sertifikat s = new Sertifikat(rs.getLong("idSertifikat"), rs.getString("naziv"), rs.getString("opis"));
             lista.add(s);
         }
-        rs.close();
         
         return lista;
     }
 
     @Override
-    public String koloneZaInsert()
+    public String getInsertColumns()
     {
         return " (naziv, opis) ";
     }
 
     @Override
-    public String vrednostiZaInsert()
+    public String getInsertPlaceholders()
     {
         return " ?, ? ";
     }
 
     @Override
-    public String vrednostiZaUpdate()
+    public String getUpdatePlaceholders()
     {
         return " naziv = ?, opis = ? ";
     }
 
     @Override
-    public String uslov()
+    public String getConditionPlaceholder()
     {
-        return " idSertifikat = " + idSertifikat;
+        return " idSertifikat = ? ";
     }
 
     @Override
-    public String uslovZaSelect()
+    public String getSelectConditionPlaceholder()
     {
         return "";
     }
 
     @Override
-    public String uslovZaFilter()
+    public String getFilterConditionPlaceholder()
     {
         return "";
     }
@@ -114,6 +113,23 @@ public class Sertifikat implements AbstractDomainObject
     {
         ps.setString(1, naziv);
         ps.setString(2, opis);
+        ps.setLong(3, idSertifikat);
+    }
+    
+    @Override
+    public void prepareCondition(PreparedStatement ps) throws SQLException
+    {
+        ps.setLong(1, idSertifikat);
+    }
+
+    @Override
+    public void prepareSelect(PreparedStatement ps) throws SQLException
+    {
+    }
+
+    @Override
+    public void prepareFilter(PreparedStatement ps) throws SQLException
+    {
     }
     
     
@@ -146,5 +162,17 @@ public class Sertifikat implements AbstractDomainObject
     public void setOpis(String opis)
     {
         this.opis = opis;
+    }
+
+    @Override
+    public String getExistenceConditionPlaceholder()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void prepareExistenceCondition(PreparedStatement ps) throws SQLException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

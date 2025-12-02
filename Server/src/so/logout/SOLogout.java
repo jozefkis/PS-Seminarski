@@ -5,6 +5,7 @@
 package so.logout;
 
 import controller.ServerController;
+import coordinator.ServerCoordinator;
 import domain.AbstractDomainObject;
 import domain.Travar;
 import java.sql.Connection;
@@ -17,7 +18,7 @@ import so.AbstractSO;
 public class SOLogout extends AbstractSO
 {
     
-    private Travar zaOdjavu;
+    private Travar travarToLogOut;
 
     @Override
     protected void validate(AbstractDomainObject ado) throws Exception
@@ -31,23 +32,12 @@ public class SOLogout extends AbstractSO
     @Override
     protected void execute(AbstractDomainObject ado, Connection connection) throws Exception
     {
-        zaOdjavu = (Travar) ado;
-
-        synchronized (ServerController.getInstance().getUlogovaniTravari())
-        {
-            if (!ServerController.getInstance().getUlogovaniTravari().contains(zaOdjavu))
-            {
-                throw new Exception("Travar nije ulogovan!");
-            }
-
-            ServerController.getInstance().getUlogovaniTravari().remove(zaOdjavu);
-        }
-        return;
+        travarToLogOut = (Travar) ado;
     }
 
-    public Travar getZaOdjavu()
+    public Travar getTravarToLogOut()
     {
-        return zaOdjavu;
+        return travarToLogOut;
     }
     
     

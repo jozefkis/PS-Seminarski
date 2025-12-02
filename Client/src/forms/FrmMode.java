@@ -10,6 +10,6 @@ package forms;
  */
 public enum FrmMode
 {
-    IZMENI,
-    DODAJ;
+    UPDATE,
+    ADD;
 }

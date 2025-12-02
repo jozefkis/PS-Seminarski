@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package so.login;
-import controller.ServerController;
+import coordinator.ServerCoordinator;
 import db.DBBroker;
 import domain.AbstractDomainObject;
 import domain.Travar;
@@ -32,28 +32,15 @@ public class SOLogin extends AbstractSO
     protected void execute(AbstractDomainObject ado, Connection connection) throws Exception
     {
         Travar travar = (Travar) ado;
-        List<Travar> all = (List<Travar>) (List<?>) DBBroker.getInstance().select(travar, connection);
+        List<Travar> list = (List<Travar>) (List<?>) DBBroker.getInstance().selectByExistenceCondition(travar, connection);
         
-        for (Travar t: all)
+        if (list == null || list.isEmpty())
         {
-            if (t.getUsername().equals(travar.getUsername()) && t.getPassword().equals(travar.getPassword()))
-            {
-                ulogovani = t;
-                
-                synchronized (ServerController.getInstance().getUlogovaniTravari())
-                {
-                    if (ServerController.getInstance().getUlogovaniTravari().contains(ulogovani)) 
-                    {
-                        throw new Exception("Travar je vec ulogovan!"); 
-                    }
-            
-                    ServerController.getInstance().getUlogovaniTravari().add(ulogovani);
-                }
-                return;
-            }
+            ulogovani = null;
+            return;
         }
         
-        throw new Exception("Ne postoji travar sa tim kredencijalima.");
+        ulogovani = list.get(0);
     }
 
     public Travar getUlogovani()

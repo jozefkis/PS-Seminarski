@@ -71,25 +71,25 @@ public class Mesto implements AbstractDomainObject
     
     //=== Implemented ADO methods ===
     @Override
-    public String nazivTabele() 
+    public String getTableName() 
     {
         return " mesto ";
     }
 
     @Override
-    public String alijas() 
+    public String getAlias() 
     {
         return " m ";
     }
 
     @Override
-    public String join() 
+    public String getJoinCondition() 
     {
         return "";
     }
 
     @Override
-    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException 
+    public List<AbstractDomainObject> getList(ResultSet rs) throws SQLException 
     {
         List<AbstractDomainObject> lista = new ArrayList<>();
 
@@ -103,37 +103,37 @@ public class Mesto implements AbstractDomainObject
     }
 
     @Override
-    public String koloneZaInsert() 
+    public String getInsertColumns() 
     {
         return " (naziv) ";
     }
 
     @Override
-    public String vrednostiZaInsert() 
+    public String getInsertPlaceholders() 
     {
         return " ? ";
     }
 
     @Override
-    public String vrednostiZaUpdate() 
+    public String getUpdatePlaceholders() 
     {
         return " naziv = ? ";
     }
 
     @Override
-    public String uslov() 
+    public String getConditionPlaceholder() 
     {
-        return " idMesto = " + idMesto;
+        return " idMesto = ? ";
     }
 
     @Override
-    public String uslovZaSelect() 
+    public String getSelectConditionPlaceholder() 
     {
         return "";
     }
 
     @Override
-    public String uslovZaFilter()
+    public String getFilterConditionPlaceholder()
     {
         return "";
     }
@@ -148,6 +148,23 @@ public class Mesto implements AbstractDomainObject
     public void prepareUpdate(PreparedStatement ps) throws SQLException
     {
         ps.setString(1, naziv);
+        ps.setLong(2, idMesto);
+    }
+    
+    @Override
+    public void prepareCondition(PreparedStatement ps) throws SQLException
+    {
+        ps.setLong(1, idMesto);
+    }
+
+    @Override
+    public void prepareSelect(PreparedStatement ps) throws SQLException
+    {
+    }
+
+    @Override
+    public void prepareFilter(PreparedStatement ps) throws SQLException
+    {
     }
         
     
@@ -172,4 +189,15 @@ public class Mesto implements AbstractDomainObject
         this.naziv = naziv;
     }
 
+    @Override
+    public String getExistenceConditionPlaceholder()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void prepareExistenceCondition(PreparedStatement ps) throws SQLException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

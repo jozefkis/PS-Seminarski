@@ -4,13 +4,19 @@
  */
 package forms;
 
-import forms.kupac.InsertUpdateKupacDijalog;
-import forms.kupac.PretragaKupacaDijalog;
+import forms.kupac.InsertUpdateKupacDialog;
+import forms.kupac.SearchKupacDialog;
 import controller.ClientController;
+import dev.jozefkis.swingutils.decorators.AutoCompleteCBDecoratorUtils;
 import domain.Caj;
 import domain.Kupac;
+import domain.Racun;
 import domain.StavkaRacuna;
 import domain.Travar;
+import forms.caj.InsertUpdateCajDialog;
+import forms.caj.SearchCajDialog;
+import forms.racun.SearchRacunDialog;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,12 +45,11 @@ public class MainForm extends javax.swing.JFrame
         ((javax.swing.JSpinner.DefaultEditor) spnrKolicina.getEditor()).getTextField().setEditable(false);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Glavna klijentska forma");
-        
+
         tblStavke.setModel(new TableModelStavkeRacuna());
+
         
-        populateTravarCombo();
-        populateKupacCombo();
-        populateCajCombo();
+        prepareCombos();
         setVisible(true);
     }
 
@@ -76,13 +81,15 @@ public class MainForm extends javax.swing.JFrame
         btnSacuvajRacun = new javax.swing.JButton();
         comboKupci = new javax.swing.JComboBox();
         lblTest = new javax.swing.JLabel();
-        btnSndTest = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        mitmSearchRacun = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        mitmAddKupac = new javax.swing.JMenuItem();
+        mitmSearchKupac = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        mitmAddCaj = new javax.swing.JMenuItem();
+        mitmSearchCaj = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter()
@@ -108,7 +115,6 @@ public class MainForm extends javax.swing.JFrame
             }
         ));
         tblStavke.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tblStavke.setShowVerticalLines(true);
         jScrollPane1.setViewportView(tblStavke);
 
         jLabel4.setText("Čaj");
@@ -179,15 +185,27 @@ public class MainForm extends javax.swing.JFrame
                 .addContainerGap())
         );
 
+        comboTravari.setPreferredSize(new java.awt.Dimension(250, 25));
+
         jLabel1.setText("Travar");
 
         jLabel2.setText("Kupac");
 
         tfUkupanIznos.setEditable(false);
+        tfUkupanIznos.setFocusable(false);
 
         jLabel3.setText("Ukupan iznos (RSD)");
 
         btnSacuvajRacun.setText("Sačuvaj račun");
+        btnSacuvajRacun.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnSacuvajRacunActionPerformed(evt);
+            }
+        });
+
+        comboKupci.setPreferredSize(new java.awt.Dimension(250, 25));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -205,9 +223,9 @@ public class MainForm extends javax.swing.JFrame
                                 .addComponent(jLabel1))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(comboTravari, 0, 211, Short.MAX_VALUE)
                                 .addComponent(tfUkupanIznos, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(comboKupci, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(comboKupci, 0, 287, Short.MAX_VALUE)
+                                .addComponent(comboTravari, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
@@ -235,43 +253,66 @@ public class MainForm extends javax.swing.JFrame
 
         lblTest.setText("jLabel1");
 
-        btnSndTest.setText("test");
-        btnSndTest.addActionListener(new java.awt.event.ActionListener()
+        jMenu1.setText("Račun");
+
+        mitmSearchRacun.setText("Pretraga računa");
+        mitmSearchRacun.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                btnSndTestActionPerformed(evt);
+                mitmSearchRacunActionPerformed(evt);
             }
         });
+        jMenu1.add(mitmSearchRacun);
 
-        jMenu1.setText("Račun");
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Kupac");
 
-        jMenuItem1.setText("Novi kupac");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        mitmAddKupac.setText("Novi kupac");
+        mitmAddKupac.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                jMenuItem1ActionPerformed(evt);
+                mitmAddKupacActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem1);
+        jMenu2.add(mitmAddKupac);
 
-        jMenuItem2.setText("Pretraga kupaca");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener()
+        mitmSearchKupac.setText("Pretraga kupaca");
+        mitmSearchKupac.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                jMenuItem2ActionPerformed(evt);
+                mitmSearchKupacActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        jMenu2.add(mitmSearchKupac);
 
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Čaj");
+
+        mitmAddCaj.setText("Novi čaj");
+        mitmAddCaj.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                mitmAddCajActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mitmAddCaj);
+
+        mitmSearchCaj.setText("Pretraga čajeva");
+        mitmSearchCaj.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                mitmSearchCajActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mitmSearchCaj);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -284,20 +325,16 @@ public class MainForm extends javax.swing.JFrame
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(335, 335, 335)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(274, 274, 274)
                 .addComponent(lblTest)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSndTest)
-                .addGap(74, 74, 74))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTest)
-                    .addComponent(btnSndTest))
+                .addComponent(lblTest)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -320,47 +357,36 @@ public class MainForm extends javax.swing.JFrame
         catch (Exception ex)
         {
             JOptionPane.showMessageDialog(this, "Logout unsucessful!\n" + ex.getMessage(), "Logout error", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
         }
     }//GEN-LAST:event_formWindowClosing
 
-    private void btnSndTestActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSndTestActionPerformed
-    {//GEN-HEADEREND:event_btnSndTestActionPerformed
-        try
-        {
-            ClientController.getInstance().sendTesetRequest();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_btnSndTestActionPerformed
+    private void mitmAddKupacActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mitmAddKupacActionPerformed
+    {//GEN-HEADEREND:event_mitmAddKupacActionPerformed
+        new InsertUpdateKupacDialog(this, true, FrmMode.ADD);
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
-    {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
-        new InsertUpdateKupacDijalog(this, true, FrmMode.DODAJ);
-
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_mitmAddKupacActionPerformed
 
     private void btnDodajStavkuActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnDodajStavkuActionPerformed
     {//GEN-HEADEREND:event_btnDodajStavkuActionPerformed
         Caj c = (Caj) comboCajevi.getSelectedItem();
         int kolicina = (int) spnrKolicina.getValue();
-        
+
         StavkaRacuna sr = new StavkaRacuna();
-        
+
         sr.setCaj(c);
         sr.setKolicina(kolicina);
         sr.setCena(c.getCena());
-        sr.setIznos(kolicina*c.getCena());
-        
+        sr.setIznos(kolicina * c.getCena());
+
         boolean result = ((TableModelStavkeRacuna) tblStavke.getModel()).addStavka(sr);
-        
+
         if (!result)
         {
             JOptionPane.showMessageDialog(this, "Već ste dodali taj čaj", "", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        
+
         ukupno += sr.getIznos();
         tfUkupanIznos.setText(String.format("%.2f", ukupno));
     }//GEN-LAST:event_btnDodajStavkuActionPerformed
@@ -371,28 +397,73 @@ public class MainForm extends javax.swing.JFrame
         if (row != -1)
         {
             TableModelStavkeRacuna model = (TableModelStavkeRacuna) tblStavke.getModel();
-            StavkaRacuna toRemove = model.getStavke().get(row); 
+            StavkaRacuna toRemove = model.getRacun().getStavkeRacuna().get(row);
             boolean result = model.removeStavka(toRemove);
-            
+
             if (result)
             {
                 ukupno -= toRemove.getIznos();
                 tfUkupanIznos.setText(String.format("%.2f", ukupno));
             }
         }
-            
+
     }//GEN-LAST:event_btnIzbrisiStavkuActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem2ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem2ActionPerformed
-        new PretragaKupacaDijalog(this, true);
+
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void mitmSearchKupacActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mitmSearchKupacActionPerformed
+    {//GEN-HEADEREND:event_mitmSearchKupacActionPerformed
+        // TODO add your handling code here:
+        new SearchKupacDialog(this, true).setVisible(true);
+    }//GEN-LAST:event_mitmSearchKupacActionPerformed
+
+    private void mitmSearchCajActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mitmSearchCajActionPerformed
+    {//GEN-HEADEREND:event_mitmSearchCajActionPerformed
+        // TODO add your handling code here:
+        new SearchCajDialog(this, true).setVisible(true);
+    }//GEN-LAST:event_mitmSearchCajActionPerformed
+
+    private void mitmAddCajActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mitmAddCajActionPerformed
+    {//GEN-HEADEREND:event_mitmAddCajActionPerformed
+        new InsertUpdateCajDialog(this, true, FrmMode.ADD).setVisible(true);
+    }//GEN-LAST:event_mitmAddCajActionPerformed
+
+    private void btnSacuvajRacunActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSacuvajRacunActionPerformed
+    {//GEN-HEADEREND:event_btnSacuvajRacunActionPerformed
+        Racun r = checkInputs();
+
+        if (r == null)
+            return;
+        
+
+        try
+        {
+            Racun racun = ClientController.getInstance().addRacun(r);
+            JOptionPane.showMessageDialog(this, "Račun je uspešno zapamćen u sistem.",
+                    "Poruka", JOptionPane.INFORMATION_MESSAGE);
+            clearInput();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Greška!\n" + ex.getMessage(), "Greška", JOptionPane.ERROR_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_btnSacuvajRacunActionPerformed
+
+    private void mitmSearchRacunActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mitmSearchRacunActionPerformed
+    {//GEN-HEADEREND:event_mitmSearchRacunActionPerformed
+        new SearchRacunDialog(this, true).setVisible(true);
+    }//GEN-LAST:event_mitmSearchRacunActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDodajStavku;
     private javax.swing.JButton btnIzbrisiStavku;
     private javax.swing.JButton btnSacuvajRacun;
-    private javax.swing.JButton btnSndTest;
     private javax.swing.JComboBox comboCajevi;
     private javax.swing.JComboBox comboKupci;
     private javax.swing.JComboBox comboTravari;
@@ -405,12 +476,15 @@ public class MainForm extends javax.swing.JFrame
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTest;
+    private javax.swing.JMenuItem mitmAddCaj;
+    private javax.swing.JMenuItem mitmAddKupac;
+    private javax.swing.JMenuItem mitmSearchCaj;
+    private javax.swing.JMenuItem mitmSearchKupac;
+    private javax.swing.JMenuItem mitmSearchRacun;
     private javax.swing.JSpinner spnrKolicina;
     private javax.swing.JTable tblStavke;
     private javax.swing.JTextField tfUkupanIznos;
@@ -423,12 +497,13 @@ public class MainForm extends javax.swing.JFrame
             List<Travar> all = ClientController.getInstance().getAllTravar();
 
             comboTravari.removeAllItems();
-            
+
             for (Travar travar : all)
             {
                 comboTravari.addItem(travar);
             }
-            
+
+            AutoCompleteCBDecoratorUtils.decorate(comboTravari, all);
             comboTravari.setSelectedItem(ulogovani);
         }
         catch (Exception ex)
@@ -437,17 +512,20 @@ public class MainForm extends javax.swing.JFrame
         }
     }
 
-    private void populateKupacCombo()
+    public void populateKupacCombo()
     {
         try
         {
             List<Kupac> all = ClientController.getInstance().getAllKupac();
             comboKupci.removeAllItems();
-            
+
             for (Kupac kupac : all)
             {
                 comboKupci.addItem(kupac);
             }
+            
+            AutoCompleteCBDecoratorUtils.decorate(comboKupci, all);
+            comboKupci.setSelectedIndex(-1);
 
         }
         catch (Exception e)
@@ -457,7 +535,7 @@ public class MainForm extends javax.swing.JFrame
         }
     }
 
-    private void populateCajCombo()
+    public void populateCajCombo()
     {
         try
         {
@@ -468,11 +546,66 @@ public class MainForm extends javax.swing.JFrame
             {
                 comboCajevi.addItem(caj);
             }
+            
+            AutoCompleteCBDecoratorUtils.decorate(comboCajevi, all);
+            comboCajevi.setSelectedIndex(-1);
         }
         catch (Exception e)
         {
             System.out.println("comboCaj error");
             System.out.println(e.getMessage());
         }
+    }
+
+    private Racun checkInputs()
+    {
+        Travar t = (Travar) comboTravari.getSelectedItem();
+        Kupac k = (Kupac) comboKupci.getSelectedItem();
+        List<StavkaRacuna> items = ((TableModelStavkeRacuna) tblStavke.getModel()).getRacun().getStavkeRacuna();
+
+        if (t == null)
+        {
+            JOptionPane.showMessageDialog(this, "Morate izabrati travara!", "Greška", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        if (k == null)
+        {
+            JOptionPane.showMessageDialog(this, "Morate izabrati kupca!", "Greška", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        if (items == null || items.size() <= 0)
+        {
+            JOptionPane.showMessageDialog(this, "Račun mora imati barem jednu stavku!", "Greška", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        if (ukupno <= 0)
+        {
+            JOptionPane.showMessageDialog(this, "Cena ne sme biti <= 0.", "Greška", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        return new Racun(-93L, LocalDateTime.now(), ukupno, t, k, items);
+    }
+
+    private void clearInput()
+    {
+        comboTravari.setSelectedIndex(-1);
+        comboKupci.setSelectedIndex(-1);
+        comboCajevi.setSelectedIndex(-1);
+        spnrKolicina.setValue(1);
+        
+        ukupno = 0;
+        tfUkupanIznos.setText("");
+        ((TableModelStavkeRacuna) tblStavke.getModel()).clearStavke();
+    }
+
+    private void prepareCombos()
+    {
+        populateTravarCombo();
+        populateKupacCombo();
+        populateCajCombo();
     }
 }

@@ -7,3 +7,5 @@
 /Server/build/
 /Client/build/
 /Common/build/
+/Client/dist/
+/Server/dist/

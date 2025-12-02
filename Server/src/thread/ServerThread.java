@@ -4,6 +4,7 @@
  */
 package thread;
 
+import coordinator.ServerCoordinator;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -33,7 +34,10 @@ public class ServerThread implements Runnable
                 Socket socket = serverSocket.accept();
                 System.out.println("Klijent se povezao!");
                 
-                Thread cth = new Thread(new ClientThread(socket));
+                ClientThread ct = new ClientThread(socket);
+                ServerCoordinator.getInstance().addClient(ct);
+                
+                Thread cth = new Thread(ct);
                 cth.start();
             }
             catch (IOException ex)

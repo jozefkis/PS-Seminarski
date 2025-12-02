@@ -18,12 +18,6 @@ import so.AbstractSO;
 public class SOFilterKupac extends AbstractSO
 {
     private List<Kupac> filtered;
-    private String filterValue;
-
-    public SOFilterKupac(String filterValue)
-    {
-        this.filterValue = filterValue;
-    }
    
     @Override
     protected void validate(AbstractDomainObject ado) throws Exception
@@ -36,17 +30,12 @@ public class SOFilterKupac extends AbstractSO
     protected void execute(AbstractDomainObject ado, Connection connection) throws Exception
     {
         Kupac k = (Kupac) ado;
-        filtered = (List<Kupac>) (List<?>) DBBroker.getInstance().filter(ado, connection, filterValue);
+        filtered = (List<Kupac>) (List<?>) DBBroker.getInstance().filter(k, connection);
     }
 
     public List<Kupac> getFiltered()
     {
         return filtered;
-    }
-
-    public String getFilterValue()
-    {
-        return filterValue;
     }
     
 }

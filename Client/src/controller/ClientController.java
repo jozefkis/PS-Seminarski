@@ -12,6 +12,7 @@ import communication.Sender;
 import domain.Caj;
 import domain.Kupac;
 import domain.Mesto;
+import domain.Racun;
 import domain.Travar;
 import java.io.IOException;
 import java.net.Socket;
@@ -146,9 +147,9 @@ public class ClientController
       
     }
     
-    public List<Kupac> filterKupci(String filterValue) throws Exception
+    public List<Kupac> filterKupci(Kupac kupac) throws Exception
     {
-        Request req = new Request(Operation.FILTER_KUPAC, filterValue);
+        Request req = new Request(Operation.FILTER_KUPAC, kupac);
         sender.send(req);
         Response res = (Response) receiver.receive();
         
@@ -183,6 +184,79 @@ public class ClientController
             throw res.getException();
         
     }
+    
+    public Kupac addKupac(Kupac kupac) throws Exception
+    {
+        Request req = new Request(Operation.ADD_KUPAC, kupac);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return (Kupac) res.getResult();
+        else
+            throw res.getException();
+    }
+    
+    public Caj addCaj(Caj caj) throws Exception
+    {
+        Request req = new Request(Operation.ADD_CAJ, caj);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return (Caj) res.getResult();
+        else
+            throw res.getException();
+    }
+    
+    public void updateCaj(Caj caj) throws Exception
+    {
+        Request req = new Request(Operation.UPDATE_CAJ, caj);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return;
+        else
+            throw res.getException();
+    }
+    
+    public void deleteCaj(Caj caj) throws Exception
+    {
+        Request req = new Request(Operation.DELETE_CAJ, caj);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return;
+        else
+            throw res.getException();
+        
+    }
+    
+    public List<Caj> filterCajevi(Caj caj) throws Exception
+    {
+        Request req = new Request(Operation.FILTER_CAJ, caj);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return (List<Caj>) res.getResult();
+        else
+            throw res.getException();
+    }
+    
+    public Racun addRacun(Racun racun) throws Exception
+    {
+        Request req = new Request(Operation.ADD_RACUN, racun);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return (Racun) res.getResult();
+        else
+            throw res.getException();
+    }
 
     public void closeConnection()
     {
@@ -199,5 +273,17 @@ public class ClientController
         {
             ex.printStackTrace();
         }
+    }
+
+    public List<Racun> getAllRacun(Racun racun) throws Exception
+    {
+        Request req = new Request(Operation.GET_ALL_RACUN, racun);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return (List<Racun>) res.getResult();
+        else
+            throw res.getException();
     }
 }

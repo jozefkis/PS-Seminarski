@@ -32,6 +32,16 @@ public class Caj implements AbstractDomainObject
         this.opis = opis;
     }
 
+    public Caj(String naziv, double cena, String korisnickoUputstvo, String opis)
+    {
+        this.naziv = naziv;
+        this.cena = cena;
+        this.korisnickoUputstvo = korisnickoUputstvo;
+        this.opis = opis;
+    }
+    
+    
+
     public Caj()
     {
     }
@@ -75,25 +85,25 @@ public class Caj implements AbstractDomainObject
     
     //=== Implemented ADO methods ===
     @Override
-    public String nazivTabele()
+    public String getTableName()
     {
         return " caj ";
     }
 
     @Override
-    public String alijas()
+    public String getAlias()
     {
         return " c ";
     }
 
     @Override
-    public String join()
+    public String getJoinCondition()
     {
         return "";
     }
 
     @Override
-    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
+    public List<AbstractDomainObject> getList(ResultSet rs) throws SQLException
     {
         List<AbstractDomainObject> lista = new ArrayList<>();
         
@@ -109,39 +119,39 @@ public class Caj implements AbstractDomainObject
     }
 
     @Override
-    public String koloneZaInsert()
+    public String getInsertColumns()
     {
         return " (naziv, cena, korisnickoUputstvo, opis) ";
     }
 
     @Override
-    public String vrednostiZaInsert()
+    public String getInsertPlaceholders()
     {
         return " ?, ?, ?, ? ";
     }
 
     @Override
-    public String vrednostiZaUpdate()
+    public String getUpdatePlaceholders()
     {
         return " naziv = ?, cena = ?, korisnickoUputstvo = ?, opis = ? ";
     }
 
     @Override
-    public String uslov()
+    public String getConditionPlaceholder()
     {
-        return " idCaj = " + idCaj;
+        return " idCaj = ? ";
     }
 
     @Override
-    public String uslovZaSelect()
+    public String getSelectConditionPlaceholder()
     {
         return "";
     }
     
     @Override
-    public String uslovZaFilter()
+    public String getFilterConditionPlaceholder()
     {
-        return "";
+        return "LOWER(naziv) LIKE ? ";
     }
 
     @Override
@@ -160,6 +170,24 @@ public class Caj implements AbstractDomainObject
         ps.setDouble(2, cena);
         ps.setString(3, korisnickoUputstvo);
         ps.setString(4, opis);
+        ps.setLong(5, idCaj);
+    }
+    
+    @Override
+    public void prepareCondition(PreparedStatement ps) throws SQLException
+    {
+        ps.setLong(1, idCaj);
+    }
+
+    @Override
+    public void prepareSelect(PreparedStatement ps) throws SQLException
+    {
+    }
+
+    @Override
+    public void prepareFilter(PreparedStatement ps) throws SQLException
+    {
+        ps.setString(1, naziv.toLowerCase()+"%");
     }
     
     
@@ -212,6 +240,18 @@ public class Caj implements AbstractDomainObject
     public void setOpis(String opis)
     {
         this.opis = opis;
+    }
+
+    @Override
+    public String getExistenceConditionPlaceholder()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void prepareExistenceCondition(PreparedStatement ps) throws SQLException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
  
 }

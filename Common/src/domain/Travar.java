@@ -72,25 +72,25 @@ public class Travar implements AbstractDomainObject
     
     //=== Implemented ADO methods ===
     @Override
-    public String nazivTabele()
+    public String getTableName()
     {
         return " travar ";
     }
 
     @Override
-    public String alijas()
+    public String getAlias()
     {
         return " t ";
     }
 
     @Override
-    public String join()
+    public String getJoinCondition()
     {
         return "";
     }
 
     @Override
-    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
+    public List<AbstractDomainObject> getList(ResultSet rs) throws SQLException
     {
         List<AbstractDomainObject> lista = new ArrayList<>();
         
@@ -101,45 +101,50 @@ public class Travar implements AbstractDomainObject
                     rs.getString("korisnickoIme"), rs.getString("sifra"));
             lista.add(t);
         }
-        rs.close();
         
         return lista;
     }
 
     @Override
-    public String koloneZaInsert()
+    public String getInsertColumns()
     {
         return " (ime, prezime, telefon, korisnickoIme, sifra) ";
     }
 
     @Override
-    public String vrednostiZaInsert()
+    public String getInsertPlaceholders()
     {
          return " ?, ?, ?, ?, ? ";
     }
 
     @Override
-    public String vrednostiZaUpdate()
+    public String getUpdatePlaceholders()
     {
         return " ime = ?, prezime = ?, telefon = ?, korisnickoIme = ?, sifra = ? ";
     }
 
     @Override
-    public String uslov()
+    public String getConditionPlaceholder()
     {
-        return " idTravar = " + idTravar;
+        return " idTravar = ? ";
     }
 
     @Override
-    public String uslovZaSelect()
+    public String getSelectConditionPlaceholder()
     {
         return "";
     }
 
     @Override
-    public String uslovZaFilter()
+    public String getFilterConditionPlaceholder()
     {
         return "";
+    }
+   
+     @Override
+    public String getExistenceConditionPlaceholder()
+    {
+        return " korisnickoIme = ? AND sifra = ? ";
     }
     
     @Override
@@ -160,8 +165,31 @@ public class Travar implements AbstractDomainObject
         ps.setString(3, telefon);
         ps.setString(4, username);
         ps.setString(5, password);
+        ps.setLong(6, idTravar);
     }
     
+    @Override
+    public void prepareCondition(PreparedStatement ps) throws SQLException
+    {
+        ps.setLong(1, idTravar);
+    }
+
+    @Override
+    public void prepareSelect(PreparedStatement ps) throws SQLException
+    {
+    }
+
+    @Override
+    public void prepareFilter(PreparedStatement ps) throws SQLException
+    {
+    }
+    
+    @Override
+    public void prepareExistenceCondition(PreparedStatement ps) throws SQLException
+    {
+        ps.setString(1, username);
+        ps.setString(2, password);
+    }
     
     //=== Getters & Setters
     public long getIdTravar()
@@ -223,5 +251,7 @@ public class Travar implements AbstractDomainObject
     {
         this.password = password;
     }    
+
+   
 
 }
