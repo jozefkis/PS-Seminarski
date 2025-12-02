@@ -4,6 +4,7 @@
  */
 package domain;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -38,7 +39,7 @@ public class StavkaRacuna implements AbstractDomainObject
     }
     
 
-    
+    //=== Implement ADO methods ===
     @Override
     public String nazivTabele()
     {
@@ -89,7 +90,6 @@ public class StavkaRacuna implements AbstractDomainObject
             
             lista.add(sr);
         }
-        rs.close();
         
         return lista;
     }
@@ -103,8 +103,7 @@ public class StavkaRacuna implements AbstractDomainObject
     @Override
     public String vrednostiZaInsert()
     {
-        return " " + racun.getIdRacun() + ", " + rb + ", " + kolicina + ", " + cena +
-                ", " + iznos + ", " + caj.getIdCaj() + " ";
+        return " ?, ?, ?, ?, ?, ? ";
     }
 
     @Override
@@ -135,6 +134,25 @@ public class StavkaRacuna implements AbstractDomainObject
         return "";
     }
     
+    @Override
+    public void prepareInsert(PreparedStatement ps) throws SQLException
+    {
+        ps.setLong(1, racun.getIdRacun());
+        ps.setInt(2, rb);
+        ps.setInt(3, kolicina);
+        ps.setDouble(4, cena);
+        ps.setDouble(5, iznos);
+        ps.setLong(5, caj.getIdCaj());
+    }
+
+    @Override
+    public void prepareUpdate(PreparedStatement ps) throws SQLException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    
+    //=== Getters & Setters ===
     public Racun getRacun()
     {
         return racun;
@@ -194,4 +212,5 @@ public class StavkaRacuna implements AbstractDomainObject
     {
         this.caj = caj;
     }
+
 }

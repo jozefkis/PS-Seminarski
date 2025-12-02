@@ -4,6 +4,7 @@
  */
 package domain;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class Travar implements AbstractDomainObject
     }
 
     
+    //=== Implemented ADO methods ===
     @Override
     public String nazivTabele()
     {
@@ -113,16 +115,13 @@ public class Travar implements AbstractDomainObject
     @Override
     public String vrednostiZaInsert()
     {
-         return " '" + ime + "', '" + prezime + "', " + "'" + telefon + "', " 
-                + "'" + username + "', '" + password + "' ";
+         return " ?, ?, ?, ?, ? ";
     }
 
     @Override
     public String vrednostiZaUpdate()
     {
-        return " ime = '" + ime + "', prezime = '" + prezime + "', telefon = " + 
-                "'" + telefon + "', korisnickoIme = " 
-                + "'" + username + "', sifra = '" + password + "' ";
+        return " ime = ?, prezime = ?, telefon = ?, korisnickoIme = ?, sifra = ? ";
     }
 
     @Override
@@ -143,6 +142,28 @@ public class Travar implements AbstractDomainObject
         return "";
     }
     
+    @Override
+    public void prepareInsert(PreparedStatement ps) throws SQLException
+    {
+        ps.setString(1, ime);
+        ps.setString(2, prezime);
+        ps.setString(3, telefon);
+        ps.setString(4, username);
+        ps.setString(5, password);
+    }
+
+    @Override
+    public void prepareUpdate(PreparedStatement ps) throws SQLException
+    {
+        ps.setString(1, ime);
+        ps.setString(2, prezime);
+        ps.setString(3, telefon);
+        ps.setString(4, username);
+        ps.setString(5, password);
+    }
+    
+    
+    //=== Getters & Setters
     public long getIdTravar()
     {
         return idTravar;
@@ -202,4 +223,5 @@ public class Travar implements AbstractDomainObject
     {
         this.password = password;
     }    
+
 }

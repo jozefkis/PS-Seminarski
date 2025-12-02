@@ -4,6 +4,7 @@
  */
 package domain;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,6 +27,12 @@ public class Sertifikat implements AbstractDomainObject
         this.opis = opis;
     }
 
+    public Sertifikat()
+    {
+    }
+    
+    
+    //=== Implemented ADO methods ===
     @Override
     public String nazivTabele()
     {
@@ -68,13 +75,13 @@ public class Sertifikat implements AbstractDomainObject
     @Override
     public String vrednostiZaInsert()
     {
-        return " '" + naziv + "', '" + opis + "' ";
+        return " ?, ? ";
     }
 
     @Override
     public String vrednostiZaUpdate()
     {
-        return " naziv = '" + naziv + "', opis = '" + opis + "' ";
+        return " naziv = ?, opis = ? ";
     }
 
     @Override
@@ -95,6 +102,22 @@ public class Sertifikat implements AbstractDomainObject
         return "";
     }
     
+    @Override
+    public void prepareInsert(PreparedStatement ps) throws SQLException
+    {
+        ps.setString(1, naziv);
+        ps.setString(2, opis);
+    }
+
+    @Override
+    public void prepareUpdate(PreparedStatement ps) throws SQLException
+    {
+        ps.setString(1, naziv);
+        ps.setString(2, opis);
+    }
+    
+    
+    //=== Getters & Setters
     public long getIdSertifikat()
     {
         return idSertifikat;

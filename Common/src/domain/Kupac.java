@@ -4,10 +4,12 @@
  */
 package domain;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -38,78 +40,96 @@ public class Kupac implements AbstractDomainObject
         this.mesto = mesto;
     }
 
-    public Kupac()
-    {
-    }
+    public Kupac() {}
 
     @Override
     public String toString()
     {
         return ime + " " + prezime + " (Telefon: " + telefon + ")";
     }
-    
-    
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(idKupac, ime, prezime);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Kupac other = (Kupac) obj;
+        return idKupac == other.idKupac &&
+               Objects.equals(ime, other.ime) &&
+               Objects.equals(prezime, other.prezime);
+    }
+
+
+    //=== Implemented ADO methods ===
     @Override
     public String nazivTabele()
     {
-        return " kupac ";
+        return "kupac";
     }
 
     @Override
     public String alijas()
     {
-        return " k ";
+        return "k";
     }
 
     @Override
     public String join()
     {
-        return " JOIN Mesto m ON (m.idMesto = k.idMesto) ";
+        return "JOIN Mesto m ON (m.idMesto = k.idMesto)";
     }
 
     @Override
     public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException
     {
         List<AbstractDomainObject> lista = new ArrayList<>();
-        
         while (rs.next())
         {
-            Mesto m  = new Mesto(rs.getLong("idMesto"), rs.getString("m.naziv"));
-            
-            Kupac k = new Kupac(rs.getLong("idKupac"), rs.getString("ime"), rs.getString("prezime"), 
-                    rs.getString("telefon"), m);
-            
+            Mesto m = new Mesto(rs.getLong("idMesto"), rs.getString("m.naziv"));
+            Kupac k = new Kupac(rs.getLong("idKupac"),
+                                rs.getString("ime"),
+                                rs.getString("prezime"),
+                                rs.getString("telefon"),
+                                m);
             lista.add(k);
         }
-        rs.close();
-        
         return lista;
     }
 
     @Override
     public String koloneZaInsert()
     {
-        return " (ime, prezime, telefon, idMesto) ";
+        return "(ime, prezime, telefon, idMesto)";
     }
 
     @Override
     public String vrednostiZaInsert()
     {
-        return "'" + ime + "', '" + prezime + "', " + "'" + telefon + "', " 
-                 + mesto.getIdMesto() + " ";
+        return "?, ?, ?, ?";
     }
 
     @Override
     public String vrednostiZaUpdate()
     {
-        return " ime = '" + ime + "', prezime = '" + prezime + "', telefon = " + 
-                "'" + telefon + "', idMesto = " + mesto.getIdMesto() + " ";
+        return "ime = ?, prezime = ?, telefon = ?, idMesto = ?";
     }
 
     @Override
     public String uslov()
     {
-        return " idKupac = " + idKupac;
+        return "idKupac = ?";
     }
 
     @Override
@@ -117,13 +137,34 @@ public class Kupac implements AbstractDomainObject
     {
         return "";
     }
-    
+
     @Override
     public String uslovZaFilter()
     {
-        return " WHERE LOWER(CONCAT(ime, ' ', prezime)) LIKE ? ";
+        return "WHERE LOWER(CONCAT(ime, ' ', prezime)) LIKE ?";
     }
-    
+
+    @Override
+    public void prepareInsert(PreparedStatement ps) throws SQLException
+    {
+        ps.setString(1, ime);
+        ps.setString(2, prezime);
+        ps.setString(3, telefon);
+        ps.setLong(4, mesto.getIdMesto());
+    }
+
+    @Override
+    public void prepareUpdate(PreparedStatement ps) throws SQLException
+    {
+        ps.setString(1, ime);
+        ps.setString(2, prezime);
+        ps.setString(3, telefon);
+        ps.setLong(4, mesto.getIdMesto());
+        ps.setLong(5, idKupac);
+    }
+
+
+    //=== Getters & Setters ===
     public long getIdKupac()
     {
         return idKupac;

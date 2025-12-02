@@ -4,6 +4,7 @@
  */
 package domain;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -34,11 +35,12 @@ public class Racun implements AbstractDomainObject
         this.stavkeRacuna = stavkeRacuna;
     }
 
-
     public Racun()
     {
     }
 
+    
+    //=== Implemented ADO methods ===
     @Override
     public String nazivTabele()
     {
@@ -80,7 +82,6 @@ public class Racun implements AbstractDomainObject
             
             lista.add(r);
         }
-        rs.close();
         
         return lista;
     }
@@ -94,14 +95,13 @@ public class Racun implements AbstractDomainObject
     @Override
     public String vrednostiZaInsert()
     {
-        return " '" + Timestamp.valueOf(datum) + "', " + ukupanIznos + ", " + travar.getIdTravar() + ", " + kupac.getIdKupac() + " ";
+        return " ?, ?, ?, ? ";
     }
 
     @Override
     public String vrednostiZaUpdate()
     {
-        return " datum = '" + Timestamp.valueOf(datum) + "', "
-                + "ukupanIznos = " + ukupanIznos + " ";
+        return " datum = ?, ukupanIznos = ? ";
 
     }
 
@@ -126,6 +126,25 @@ public class Racun implements AbstractDomainObject
         return "";
     }
     
+    @Override
+    public void prepareInsert(PreparedStatement ps) throws SQLException
+    {
+        ps.setTimestamp(1, Timestamp.valueOf(datum));
+        ps.setDouble(2, ukupanIznos);
+        ps.setDouble(3, travar.getIdTravar());
+        ps.setDouble(4, kupac.getIdKupac());
+        
+    }
+
+    @Override
+    public void prepareUpdate(PreparedStatement ps) throws SQLException
+    {
+        ps.setTimestamp(1, Timestamp.valueOf(datum));
+        ps.setDouble(2, ukupanIznos);
+    }
+    
+    
+    //=== Getters & Setters
     public long getIdRacun()
     {
         return idRacun;
@@ -185,6 +204,8 @@ public class Racun implements AbstractDomainObject
     {
         this.stavkeRacuna = stavkeRacuna;
     }
+    
+    
     
     public void dodajStavku(StavkaRacuna stavka)
     {

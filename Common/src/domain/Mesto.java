@@ -4,6 +4,7 @@
  */
 package domain;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,95 +39,6 @@ public class Mesto implements AbstractDomainObject
     }
 
     @Override
-    public String nazivTabele() 
-    {
-        return " mesto ";
-    }
-
-    @Override
-    public String alijas() 
-    {
-        return " m ";
-    }
-
-    @Override
-    public String join() 
-    {
-        return "";
-    }
-
-    @Override
-    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException 
-    {
-        List<AbstractDomainObject> lista = new ArrayList<>();
-
-        while(rs.next()) 
-        {
-            Mesto m = new Mesto(rs.getLong("idMesto"),rs.getString("m.naziv"));
-            lista.add(m);
-        }
-
-        rs.close();
-        return lista;
-    }
-
-    @Override
-    public String koloneZaInsert() 
-    {
-        return " (naziv) ";
-    }
-
-    @Override
-    public String vrednostiZaInsert() 
-    {
-        return " '" + naziv + "' ";
-    }
-
-    @Override
-    public String vrednostiZaUpdate() 
-    {
-        return " naziv = '" + naziv + "' ";
-    }
-
-    @Override
-    public String uslov() 
-    {
-        return " idMesto = " + idMesto;
-    }
-
-    @Override
-    public String uslovZaSelect() 
-    {
-        return "";
-    }
-
-    @Override
-    public String uslovZaFilter()
-    {
-        return "";
-    }
-    
-    public long getIdMesto()
-    {
-        return idMesto;
-    }
-
-    public void setIdMesto(long idMesto)
-    {
-        this.idMesto = idMesto;
-    }
-
-    public String getNaziv() 
-    {
-        return naziv;
-    }
-
-    public void setNaziv(String naziv) 
-    {
-        this.naziv = naziv;
-    }
-
-    @Override
     public int hashCode()
     {
         int hash = 7;
@@ -155,4 +67,109 @@ public class Mesto implements AbstractDomainObject
         }
         return Objects.equals(this.naziv, other.naziv);
     }
+    
+    
+    //=== Implemented ADO methods ===
+    @Override
+    public String nazivTabele() 
+    {
+        return " mesto ";
+    }
+
+    @Override
+    public String alijas() 
+    {
+        return " m ";
+    }
+
+    @Override
+    public String join() 
+    {
+        return "";
+    }
+
+    @Override
+    public List<AbstractDomainObject> vratiListu(ResultSet rs) throws SQLException 
+    {
+        List<AbstractDomainObject> lista = new ArrayList<>();
+
+        while(rs.next()) 
+        {
+            Mesto m = new Mesto(rs.getLong("idMesto"),rs.getString("m.naziv"));
+            lista.add(m);
+        }
+
+        return lista;
+    }
+
+    @Override
+    public String koloneZaInsert() 
+    {
+        return " (naziv) ";
+    }
+
+    @Override
+    public String vrednostiZaInsert() 
+    {
+        return " ? ";
+    }
+
+    @Override
+    public String vrednostiZaUpdate() 
+    {
+        return " naziv = ? ";
+    }
+
+    @Override
+    public String uslov() 
+    {
+        return " idMesto = " + idMesto;
+    }
+
+    @Override
+    public String uslovZaSelect() 
+    {
+        return "";
+    }
+
+    @Override
+    public String uslovZaFilter()
+    {
+        return "";
+    }
+    
+    @Override
+    public void prepareInsert(PreparedStatement ps) throws SQLException
+    {
+        ps.setString(1, naziv);
+    }
+
+    @Override
+    public void prepareUpdate(PreparedStatement ps) throws SQLException
+    {
+        ps.setString(1, naziv);
+    }
+        
+    
+    //=== Getters & Setters ===
+    public long getIdMesto()
+    {
+        return idMesto;
+    }
+
+    public void setIdMesto(long idMesto)
+    {
+        this.idMesto = idMesto;
+    }
+
+    public String getNaziv() 
+    {
+        return naziv;
+    }
+
+    public void setNaziv(String naziv) 
+    {
+        this.naziv = naziv;
+    }
+
 }

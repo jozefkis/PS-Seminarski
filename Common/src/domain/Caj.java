@@ -4,6 +4,7 @@
  */
 package domain;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -41,7 +42,38 @@ public class Caj implements AbstractDomainObject
         return naziv + " (" + String.format("%.2f", cena) + " rsd)";
     }
    
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        return hash;
+    }
 
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Caj other = (Caj) obj;
+        if (this.idCaj != other.idCaj)
+        {
+            return false;
+        }
+        return Objects.equals(this.naziv, other.naziv);
+    }
+    
+    
+    //=== Implemented ADO methods ===
     @Override
     public String nazivTabele()
     {
@@ -72,10 +104,8 @@ public class Caj implements AbstractDomainObject
                     rs.getString("opis"));
             lista.add(c);
         }
-        rs.close();
         
-        return lista;
-       
+        return lista;    
     }
 
     @Override
@@ -87,15 +117,13 @@ public class Caj implements AbstractDomainObject
     @Override
     public String vrednostiZaInsert()
     {
-        return "'" + naziv + "', " + cena + ", " + 
-                "'" + korisnickoUputstvo + "', " + "'" + opis + "' ";
+        return " ?, ?, ?, ? ";
     }
 
     @Override
     public String vrednostiZaUpdate()
     {
-        return " naziv = '" + naziv + "', cena = " + cena + ", korisnickoUputsvo = " + 
-                "'" + korisnickoUputstvo + "', opis = " + "'" + opis + "' ";
+        return " naziv = ?, cena = ?, korisnickoUputstvo = ?, opis = ? ";
     }
 
     @Override
@@ -116,6 +144,26 @@ public class Caj implements AbstractDomainObject
         return "";
     }
 
+    @Override
+    public void prepareInsert(PreparedStatement ps) throws SQLException
+    {
+        ps.setString(1, naziv);
+        ps.setDouble(2, cena);
+        ps.setString(3, korisnickoUputstvo);
+        ps.setString(4, opis);
+    }
+
+    @Override
+    public void prepareUpdate(PreparedStatement ps) throws SQLException
+    {
+        ps.setString(1, naziv);
+        ps.setDouble(2, cena);
+        ps.setString(3, korisnickoUputstvo);
+        ps.setString(4, opis);
+    }
+    
+    
+    //=== Getters & Setters ===
     public long getIdCaj()
     {
         return idCaj;
@@ -165,38 +213,5 @@ public class Caj implements AbstractDomainObject
     {
         this.opis = opis;
     }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 7;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final Caj other = (Caj) obj;
-        if (this.idCaj != other.idCaj)
-        {
-            return false;
-        }
-        return Objects.equals(this.naziv, other.naziv);
-    }
-
-    
-    
-    
+ 
 }

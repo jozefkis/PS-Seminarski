@@ -34,62 +34,59 @@ public class DBBroker
         return instance;
     }
 
-    public List<AbstractDomainObject> select(AbstractDomainObject ado, Connection connection) throws SQLException 
+    public List<AbstractDomainObject> select(AbstractDomainObject ado, Connection connection) throws SQLException
     {
-        String upit = "SELECT * FROM " + ado.nazivTabele() + " " + ado.alijas()
-                + " " + ado.join() + " " + ado.uslovZaSelect();
+        String upit = "SELECT * FROM " + ado.nazivTabele() + " " + ado.alijas() + " " + ado.join() + " " + ado.uslovZaSelect();
         System.out.println(upit);
-        
+
         Statement s = connection.createStatement();
         ResultSet rs = s.executeQuery(upit);
-        
+
         return ado.vratiListu(rs);
     }
 
-    public PreparedStatement insert(AbstractDomainObject ado, Connection connection) throws SQLException 
+    public List<AbstractDomainObject> filter(AbstractDomainObject ado, Connection connection, String filterValue) throws SQLException
     {
-        String naredba = "INSERT INTO " + ado.nazivTabele() + " "
-                + ado.koloneZaInsert() + " VALUES(" + ado.vrednostiZaInsert() + ")";
+        String upit = "SELECT * FROM " + ado.nazivTabele() + " " + ado.alijas() + " " + ado.join() + " " + ado.uslovZaFilter();
+        System.out.println(upit);
+
+        PreparedStatement ps = connection.prepareStatement(upit);
+        ps.setString(1, filterValue.toLowerCase() + "%");
+
+        ResultSet rs = ps.executeQuery();
+
+        return ado.vratiListu(rs);
+    }
+
+    public PreparedStatement insert(AbstractDomainObject ado, Connection connection) throws SQLException
+    {
+        String naredba = "INSERT INTO " + ado.nazivTabele() + " " + ado.koloneZaInsert() + " VALUES (" + ado.vrednostiZaInsert() + ")";
         System.out.println(naredba);
-        
+
         PreparedStatement ps = connection.prepareStatement(naredba, Statement.RETURN_GENERATED_KEYS);
+        ado.prepareInsert(ps);
         ps.executeUpdate();
-        
+
         return ps;
     }
 
-    public void update(AbstractDomainObject ado, Connection connection) throws SQLException 
+    public void update(AbstractDomainObject ado, Connection connection) throws SQLException
     {
-        String naredba = "UPDATE " + ado.nazivTabele() + " SET "
-                + ado.vrednostiZaUpdate() + " WHERE " + ado.uslov();
+        String naredba = "UPDATE " + ado.nazivTabele() + " SET " + ado.vrednostiZaUpdate() + " WHERE " + ado.uslov();
         System.out.println(naredba);
-    
-        Statement s = connection.createStatement();
-        s.executeUpdate(naredba);
+
+        PreparedStatement ps = connection.prepareStatement(naredba);
+        ado.prepareUpdate(ps);
+        ps.executeUpdate();
     }
 
-    public void delete(AbstractDomainObject ado, Connection connection) throws SQLException 
+    public void delete(AbstractDomainObject ado, Connection connection) throws SQLException
     {
         String naredba = "DELETE FROM " + ado.nazivTabele() + " WHERE " + ado.uslov();
         System.out.println(naredba);
-        
+
         Statement s = connection.createStatement();
         s.executeUpdate(naredba);
-    }
-    
-    public List<AbstractDomainObject> filter(AbstractDomainObject ado, Connection connection, String filterValue) throws SQLException
-    {
-        String upit = "SELECT * FROM " + ado.nazivTabele() + " " + ado.alijas()
-                + " " + ado.join() + " " + ado.uslovZaFilter();
-        System.out.println(upit);
-        
-        String likeParam = filterValue.toLowerCase() + "%";
-        
-        PreparedStatement ps = connection.prepareStatement(upit);
-        ps.setString(1, likeParam);
-        ResultSet rs = ps.executeQuery();
-        
-        return ado.vratiListu(rs);
     }
 
 }

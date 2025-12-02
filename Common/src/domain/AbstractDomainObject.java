@@ -7,6 +7,7 @@ package domain;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 /**
@@ -25,4 +26,6 @@ public interface AbstractDomainObject extends Serializable
     public String uslov();
     public String uslovZaSelect();
     public String uslovZaFilter();
+    void prepareInsert(PreparedStatement ps) throws SQLException;
+    void prepareUpdate(PreparedStatement ps) throws SQLException;
 }

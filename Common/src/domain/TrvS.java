@@ -4,9 +4,10 @@
  */
 package domain;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class TrvS implements AbstractDomainObject
     }
     
     
-
+    //=== Implemented ADO methods
     @Override
     public String nazivTabele()
     {
@@ -70,7 +71,6 @@ public class TrvS implements AbstractDomainObject
             
             lista.add(ts);
         }
-        rs.close();
         
         return lista;
     }
@@ -84,8 +84,7 @@ public class TrvS implements AbstractDomainObject
     @Override
     public String vrednostiZaInsert()
     {
-        return " " + travar.getIdTravar() + ", " + sertifikat.getIdSertifikat() + ", "
-                + "'" + Date.valueOf(datumIzdavanja) + "' ";
+        return " ?, ?, ? ";
     }
 
     @Override
@@ -112,6 +111,22 @@ public class TrvS implements AbstractDomainObject
         return "";
     }
     
+    @Override
+    public void prepareInsert(PreparedStatement ps) throws SQLException
+    {
+        ps.setLong(1, travar.getIdTravar());
+        ps.setLong(2, sertifikat.getIdSertifikat());
+        ps.setDate(3, Date.valueOf(datumIzdavanja));
+    }
+
+    @Override
+    public void prepareUpdate(PreparedStatement ps) throws SQLException
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    
+    //=== Getters & Setters
     public Travar getTravar()
     {
         return travar;
@@ -141,4 +156,5 @@ public class TrvS implements AbstractDomainObject
     {
         this.datumIzdavanja = datumIzdavanja;
     }
+    
 }
