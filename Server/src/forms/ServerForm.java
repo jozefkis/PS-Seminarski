@@ -127,6 +127,7 @@ public class ServerForm extends javax.swing.JFrame
 
             }
         ));
+        tblOnlineTravari.setFocusable(false);
         jScrollPane1.setViewportView(tblOnlineTravari);
 
         jMenu1.setText("Config");

@@ -178,7 +178,7 @@ public class InsertUpdateKupacDijalog extends javax.swing.JDialog
             return;
         }
         
-        if (currentMode == FrmMode.IZMENI)
+        if (currentMode == FrmMode.UPDATE)
         {
             try
             {
@@ -276,7 +276,7 @@ public class InsertUpdateKupacDijalog extends javax.swing.JDialog
             ex.printStackTrace();
         }
 
-        if (currentMode == FrmMode.DODAJ)
+        if (currentMode == FrmMode.ADD)
         {
             tfID.setVisible(false);
             lblID.setVisible(false);
@@ -284,7 +284,7 @@ public class InsertUpdateKupacDijalog extends javax.swing.JDialog
             btnAction.setText("Dodaj");
             setTitle("Dijalog - Novi kupac");
         }
-        else if (currentMode == FrmMode.IZMENI)
+        else if (currentMode == FrmMode.UPDATE)
         {
             btnAction.setText("Izmeni");
             setTitle("Dijalog - Izmeni kupca");

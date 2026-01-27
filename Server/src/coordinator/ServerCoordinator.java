@@ -41,7 +41,7 @@ public class ServerCoordinator
         activeClients.add(cth);
     }
 
-    public synchronized boolean isTraverAlreadyLogged(Travar travar)
+    public synchronized boolean isTravarAlreadyLogged(Travar travar)
     {
         for (ClientThread cth : activeClients)
         {

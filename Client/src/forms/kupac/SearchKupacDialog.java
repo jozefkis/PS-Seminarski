@@ -63,6 +63,7 @@ public class SearchKupacDialog extends javax.swing.JDialog
 
             }
         ));
+        tblKupci.setFocusable(false);
         jScrollPane1.setViewportView(tblKupci);
 
         tfFirstLastName.addKeyListener(new java.awt.event.KeyAdapter()
@@ -154,6 +155,7 @@ public class SearchKupacDialog extends javax.swing.JDialog
         if (index < 0)
         {
             JOptionPane.showMessageDialog(this, "Morate izabrati kupca.", "", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
 
         Kupac kupac = ((TableModelKupac) tblKupci.getModel()).getKupci().get(index);
@@ -166,6 +168,7 @@ public class SearchKupacDialog extends javax.swing.JDialog
         if (index < 0)
         {
             JOptionPane.showMessageDialog(this, "Morate izabrati kupca.", "", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
 
         Kupac kupac = ((TableModelKupac) tblKupci.getModel()).getKupci().get(index);

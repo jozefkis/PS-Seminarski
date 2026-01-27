@@ -135,8 +135,10 @@ public class ClientThread implements Runnable
                     break;
                 case GET_ALL_RACUN:
                     Racun r = (Racun) req.getArgument();
-                    System.out.println("Racun: " + r.getTravar());
                     response.setResult(ServerController.getInstance().getAllRacun(r));
+                    break;
+                case UPDATE_RACUN:
+                    ServerController.getInstance().updateRacun((Racun) req.getArgument());
                     break;
             }
         }

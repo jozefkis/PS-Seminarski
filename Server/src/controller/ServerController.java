@@ -9,8 +9,8 @@ import domain.Caj;
 import domain.Kupac;
 import domain.Mesto;
 import domain.Racun;
+import domain.StavkaRacuna;
 import domain.Travar;
-import java.util.ArrayList;
 import java.util.List;
 import so.kupac.SOGetAllKupac;
 import so.login.SOLogin;
@@ -27,6 +27,7 @@ import so.logout.SOLogout;
 import so.mesto.SOGetAllMesto;
 import so.racun.SOAddRacun;
 import so.racun.SOGetAllRacun;
+import so.racun.SOUpdateRacun;
 import so.travar.SOGetAllTravar;
 
 /**
@@ -63,7 +64,7 @@ public class ServerController
             throw new Exception("Korisničko ime ili lozinka su pogrešni!");
         }
 
-        if (ServerCoordinator.getInstance().isTraverAlreadyLogged(ulogovani))
+        if (ServerCoordinator.getInstance().isTravarAlreadyLogged(ulogovani))
         {
             throw new Exception("Travar je već ulogovan!");
         }
@@ -184,5 +185,11 @@ public class ServerController
         SOGetAllRacun so = new SOGetAllRacun();
         so.templateExecute(racun);
         return so.getAll();
+    }
+    
+    public void updateRacun(Racun racun) throws Exception
+    {
+        SOUpdateRacun so = new SOUpdateRacun();
+        so.templateExecute(racun);
     }
 }

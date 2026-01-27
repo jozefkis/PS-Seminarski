@@ -11,9 +11,11 @@ import domain.Travar;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import javax.swing.plaf.BorderUIResource;
 
 /**
  *
@@ -43,7 +45,6 @@ public class LoginForm extends javax.swing.JFrame
             lblImg.setText("Nije pronađena slika: tea_login.jpg");
         }
 
-        setTitle("Log in form");
         setLocationRelativeTo(null);
         setSize(576, 420);
         setResizable(false);
@@ -58,7 +59,6 @@ public class LoginForm extends javax.swing.JFrame
         pfPass.putClientProperty(FlatClientProperties.STYLE, "showRevealButton:true");
 
         btnLogin.putClientProperty("JButton.buttonType", "roundRect");
-        //btnLogin.putClientProperty("JButton.arc", 25);
         btnLogin.setBackground(new Color(125, 168, 64));
         btnLogin.setForeground(Color.WHITE);
         btnLogin.setFont(new Font("SansSerif", Font.BOLD, 14));
@@ -203,18 +203,28 @@ public class LoginForm extends javax.swing.JFrame
         {
             public void run()
             {
+                FlatMacLightLaf.setup();
+
                 Color fokusBoja = new Color(0x7da840);
-                UIManager.put("Component.accentColor", fokusBoja);
+
+                //UIManager.put("Component.accentColor", fokusBoja);
                 UIManager.put("Component.focusColor", fokusBoja);
                 UIManager.put("ComboBox.selectionBackground", fokusBoja);
                 UIManager.put("MenuItem.selectionBackground", fokusBoja);
 
                 UIManager.put("ComboBox.buttonBackground", fokusBoja);
-                
 
-                javax.swing.UIManager.put("TextComponent.arc", 15);
+                UIManager.put("Table.selectionBackground", fokusBoja);
+                UIManager.put("Table.selectionInactiveBackground", fokusBoja);
+                UIManager.put("Table.selectionInactiveForeground", 0xFFFFFF);
+                UIManager.put("Table.selectionForeground", 0xFFFFFF);
 
-                FlatMacLightLaf.setup();
+                UIManager.put("TextComponent.arc", 15);
+                UIManager.put("Button.hoverBorderColor", fokusBoja);
+
+                UIManager.put("Component.focusedBorderColor", fokusBoja);
+                UIManager.put("Component.showFocusBorder", false);
+                UIManager.put("Button.focusedBorderColor", new Color(0, 0, 0, 0));
 
                 new LoginForm().setVisible(true);
             }

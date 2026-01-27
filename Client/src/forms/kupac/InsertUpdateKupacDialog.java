@@ -4,8 +4,8 @@
  */
 package forms.kupac;
 
+import com.github.jozefkis.autocompletecb.AutoCompleteCBDecoratorUtils;
 import controller.ClientController;
-import dev.jozefkis.swingutils.decorators.AutoCompleteCBDecoratorUtils;
 import domain.Kupac;
 import domain.Mesto;
 import forms.FrmMode;

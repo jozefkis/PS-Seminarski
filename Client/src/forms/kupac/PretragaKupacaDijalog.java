@@ -174,7 +174,7 @@ public class PretragaKupacaDijalog extends javax.swing.JDialog
 
         try
         {
-            List<Kupac> filtered = ClientController.getInstance().filterKupci(imePrezime);
+            List<Kupac> filtered = ClientController.getInstance().filterKupci(new Kupac());
             ((TableModelKupac) tblKupci.getModel()).setKupci(filtered);
         }
         catch (Exception ex)
@@ -194,7 +194,7 @@ public class PretragaKupacaDijalog extends javax.swing.JDialog
         }
         
         Kupac kupac = ((TableModelKupac) tblKupci.getModel()).getKupci().get(index);
-        new InsertUpdateKupacDijalog(this, true, FrmMode.IZMENI, kupac);
+        new InsertUpdateKupacDijalog(this, true, FrmMode.UPDATE, kupac);
     }//GEN-LAST:event_btnDetaljiActionPerformed
 
     private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnObrisiActionPerformed

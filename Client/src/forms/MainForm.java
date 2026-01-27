@@ -4,10 +4,11 @@
  */
 package forms;
 
+import com.github.jozefkis.autocompletecb.AutoCompleteCBDecoratorUtils;
 import forms.kupac.InsertUpdateKupacDialog;
 import forms.kupac.SearchKupacDialog;
 import controller.ClientController;
-import dev.jozefkis.swingutils.decorators.AutoCompleteCBDecoratorUtils;
+
 import domain.Caj;
 import domain.Kupac;
 import domain.Racun;
@@ -30,8 +31,9 @@ import models.TableModelStavkeRacuna;
 public class MainForm extends javax.swing.JFrame
 {
 
-    private Travar ulogovani;
+    private final Travar ulogovani;
     private double ukupno = 0;
+    private final TableModelStavkeRacuna model;
 
     /**
      * Creates new form MainForm
@@ -47,8 +49,9 @@ public class MainForm extends javax.swing.JFrame
         setTitle("Glavna klijentska forma");
 
         tblStavke.setModel(new TableModelStavkeRacuna());
+        model = (TableModelStavkeRacuna) tblStavke.getModel();
+        model.addTableModelListener(e -> updateUkupno());
 
-        
         prepareCombos();
         setVisible(true);
     }
@@ -115,6 +118,7 @@ public class MainForm extends javax.swing.JFrame
             }
         ));
         tblStavke.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tblStavke.setFocusable(false);
         jScrollPane1.setViewportView(tblStavke);
 
         jLabel4.setText("Čaj");
@@ -370,6 +374,12 @@ public class MainForm extends javax.swing.JFrame
     private void btnDodajStavkuActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnDodajStavkuActionPerformed
     {//GEN-HEADEREND:event_btnDodajStavkuActionPerformed
         Caj c = (Caj) comboCajevi.getSelectedItem();
+        if (c == null)
+        {
+            JOptionPane.showMessageDialog(this, "Morate izabrati caj.", "", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
         int kolicina = (int) spnrKolicina.getValue();
 
         StavkaRacuna sr = new StavkaRacuna();
@@ -387,8 +397,7 @@ public class MainForm extends javax.swing.JFrame
             return;
         }
 
-        ukupno += sr.getIznos();
-        tfUkupanIznos.setText(String.format("%.2f", ukupno));
+        
     }//GEN-LAST:event_btnDodajStavkuActionPerformed
 
     private void btnIzbrisiStavkuActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnIzbrisiStavkuActionPerformed
@@ -398,13 +407,7 @@ public class MainForm extends javax.swing.JFrame
         {
             TableModelStavkeRacuna model = (TableModelStavkeRacuna) tblStavke.getModel();
             StavkaRacuna toRemove = model.getRacun().getStavkeRacuna().get(row);
-            boolean result = model.removeStavka(toRemove);
-
-            if (result)
-            {
-                ukupno -= toRemove.getIznos();
-                tfUkupanIznos.setText(String.format("%.2f", ukupno));
-            }
+            model.removeStavka(toRemove);
         }
 
     }//GEN-LAST:event_btnIzbrisiStavkuActionPerformed
@@ -436,8 +439,9 @@ public class MainForm extends javax.swing.JFrame
         Racun r = checkInputs();
 
         if (r == null)
+        {
             return;
-        
+        }
 
         try
         {
@@ -523,7 +527,7 @@ public class MainForm extends javax.swing.JFrame
             {
                 comboKupci.addItem(kupac);
             }
-            
+
             AutoCompleteCBDecoratorUtils.decorate(comboKupci, all);
             comboKupci.setSelectedIndex(-1);
 
@@ -546,7 +550,7 @@ public class MainForm extends javax.swing.JFrame
             {
                 comboCajevi.addItem(caj);
             }
-            
+
             AutoCompleteCBDecoratorUtils.decorate(comboCajevi, all);
             comboCajevi.setSelectedIndex(-1);
         }
@@ -561,8 +565,8 @@ public class MainForm extends javax.swing.JFrame
     {
         Travar t = (Travar) comboTravari.getSelectedItem();
         Kupac k = (Kupac) comboKupci.getSelectedItem();
-        List<StavkaRacuna> items = ((TableModelStavkeRacuna) tblStavke.getModel()).getRacun().getStavkeRacuna();
-
+        Racun racun = model.getRacun();
+        
         if (t == null)
         {
             JOptionPane.showMessageDialog(this, "Morate izabrati travara!", "Greška", JOptionPane.ERROR_MESSAGE);
@@ -575,7 +579,7 @@ public class MainForm extends javax.swing.JFrame
             return null;
         }
 
-        if (items == null || items.size() <= 0)
+        if (racun.getStavkeRacuna() == null || racun.getStavkeRacuna().size() <= 0)
         {
             JOptionPane.showMessageDialog(this, "Račun mora imati barem jednu stavku!", "Greška", JOptionPane.ERROR_MESSAGE);
             return null;
@@ -586,20 +590,24 @@ public class MainForm extends javax.swing.JFrame
             JOptionPane.showMessageDialog(this, "Cena ne sme biti <= 0.", "Greška", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-
-        return new Racun(-93L, LocalDateTime.now(), ukupno, t, k, items);
+        
+        racun.setDatum(LocalDateTime.now());
+        racun.setKupac(k);
+        racun.setTravar(t);
+        racun.setUkupanIznos(ukupno);
+        
+        return racun;
     }
 
     private void clearInput()
     {
-        comboTravari.setSelectedIndex(-1);
         comboKupci.setSelectedIndex(-1);
         comboCajevi.setSelectedIndex(-1);
         spnrKolicina.setValue(1);
-        
+
+        ((TableModelStavkeRacuna) tblStavke.getModel()).clearStavke();
         ukupno = 0;
         tfUkupanIznos.setText("");
-        ((TableModelStavkeRacuna) tblStavke.getModel()).clearStavke();
     }
 
     private void prepareCombos()
@@ -607,5 +615,11 @@ public class MainForm extends javax.swing.JFrame
         populateTravarCombo();
         populateKupacCombo();
         populateCajCombo();
+    }
+
+    private void updateUkupno()
+    {
+        ukupno = model.getRacun().getUkupanIznos();
+        tfUkupanIznos.setText(String.format("%.2f", ukupno));
     }
 }

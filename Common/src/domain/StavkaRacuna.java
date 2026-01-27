@@ -24,6 +24,7 @@ public class StavkaRacuna implements AbstractDomainObject
     private double cena;
     private double iznos;
     private Caj caj;
+    private String status; // DB_INSERT, DB_DELETE, DB_UPDATE, DO_NOTHING, LIST_REMOVE
 
     public StavkaRacuna(Racun racun, int rb, int kolicina, double cena, double iznos, Caj caj)
     {
@@ -33,10 +34,12 @@ public class StavkaRacuna implements AbstractDomainObject
         this.cena = cena;
         this.iznos = iznos;
         this.caj = caj;
+        status = "DO_NOTHING";
     }
 
     public StavkaRacuna()
     {
+        status = "DB_INSERT";
     }
 
     @Override
@@ -62,7 +65,8 @@ public class StavkaRacuna implements AbstractDomainObject
             return false;
         }
         final StavkaRacuna other = (StavkaRacuna) obj;
-        return Objects.equals(this.caj, other.caj);
+        
+        return Objects.equals(this.caj, other.caj) && !"DB_DELETE".equals(other.getStatus());
     }
     
     
@@ -94,33 +98,7 @@ public class StavkaRacuna implements AbstractDomainObject
     @Override
     public List<AbstractDomainObject> getList(ResultSet rs) throws SQLException
     {
-        List<AbstractDomainObject> lista = new ArrayList<>();
-        
-        while (rs.next())
-        {
-            Travar t = new Travar(rs.getLong("idTravar"),rs.getString("t.ime"), 
-                    rs.getString("t.prezime"), rs.getString("t.telefon"),
-                    rs.getString("t.korisnickoIme"), rs.getString("t.sifra"));
-            
-            Mesto m = new Mesto(rs.getLong("m.idMesto"),rs.getString("m.naziv"));
-            
-            Kupac k = new Kupac(rs.getLong("idKupac"), rs.getString("k.ime"), rs.getString("k.prezime"), 
-                    rs.getString("k.telefon"), m);
-            
-            Racun r = new Racun(rs.getLong("idRacun"), rs.getObject("r.datum", LocalDateTime.class), 
-                    rs.getDouble("r.ukupanIznos"), t, k, null);
-            
-            Caj c = new Caj(rs.getLong("idCaj"),rs.getString("c.naziv"), 
-                    rs.getDouble("c.cena"), rs.getString("c.korisnickoUputstvo"),
-                    rs.getString("c.opis"));
-            
-            StavkaRacuna sr = new StavkaRacuna(r, rs.getInt("rb"), rs.getInt("kolicina"),
-                    rs.getDouble("sr.cena"), rs.getDouble("sr.iznos"), c);
-            
-            lista.add(sr);
-        }
-        
-        return lista;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -138,23 +116,23 @@ public class StavkaRacuna implements AbstractDomainObject
     @Override
     public String getUpdatePlaceholders()
     {
-        return "";
+        return " kolicina = ?, iznos = ? ";
     }
 
     @Override
     public String getConditionPlaceholder()
     {
-        return " idRacun = ? ";
+        return " idRacun = ? AND rb = ?";
     }
 
     @Override
     public String getSelectConditionPlaceholder()
     {
-        if (racun != null) 
+        if (racun != null && racun.getIdRacun() > 0) 
         {
             return " WHERE r.idRacun = ? ";
         }
-        return " WHERE c.idCaj = ? ";
+        return "";
     }
 
     @Override
@@ -177,19 +155,23 @@ public class StavkaRacuna implements AbstractDomainObject
     @Override
     public void prepareUpdate(PreparedStatement ps) throws SQLException
     {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ps.setInt(1, kolicina);
+        ps.setDouble(2, cena * kolicina);
+        ps.setLong(3, racun.getIdRacun());
+        ps.setInt(4, rb);
     }
     
     @Override
     public void prepareCondition(PreparedStatement ps) throws SQLException
     {
         ps.setLong(1, racun.getIdRacun());
+        ps.setInt(2, rb);
     }
 
     @Override
     public void prepareSelect(PreparedStatement ps) throws SQLException
     {
-        if (racun != null) 
+        if (racun != null && racun.getIdRacun() > 0) 
         {
             ps.setLong(1, racun.getIdRacun());
         }
@@ -277,6 +259,16 @@ public class StavkaRacuna implements AbstractDomainObject
     public void prepareExistenceCondition(PreparedStatement ps) throws SQLException
     {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public String getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(String status)
+    {
+        this.status = status;
     }
 
 }

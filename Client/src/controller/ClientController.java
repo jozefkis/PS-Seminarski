@@ -13,6 +13,7 @@ import domain.Caj;
 import domain.Kupac;
 import domain.Mesto;
 import domain.Racun;
+import domain.StavkaRacuna;
 import domain.Travar;
 import java.io.IOException;
 import java.net.Socket;
@@ -138,15 +139,6 @@ public class ClientController
             throw res.getException();
     }
     
-    public void sendTesetRequest() throws Exception
-    {
-        Request req = new Request(Operation.TEST, null);
-        sender.send(req);
-        Response res = (Response) receiver.receive();
-        System.out.println(res.getResult());
-      
-    }
-    
     public List<Kupac> filterKupci(Kupac kupac) throws Exception
     {
         Request req = new Request(Operation.FILTER_KUPAC, kupac);
@@ -258,6 +250,30 @@ public class ClientController
             throw res.getException();
     }
 
+    public List<Racun> getAllRacun(Racun racun) throws Exception
+    {
+        Request req = new Request(Operation.GET_ALL_RACUN, racun);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return (List<Racun>) res.getResult();
+        else
+            throw res.getException();
+    }
+
+    public void updateRacun(Racun racun) throws Exception
+    {
+        Request req = new Request(Operation.UPDATE_RACUN, racun);
+        sender.send(req);
+        Response res = (Response) receiver.receive();
+        
+        if (res.getException() == null)
+            return;
+        else
+            throw res.getException();
+    }
+    
     public void closeConnection()
     {
         try
@@ -273,17 +289,5 @@ public class ClientController
         {
             ex.printStackTrace();
         }
-    }
-
-    public List<Racun> getAllRacun(Racun racun) throws Exception
-    {
-        Request req = new Request(Operation.GET_ALL_RACUN, racun);
-        sender.send(req);
-        Response res = (Response) receiver.receive();
-        
-        if (res.getException() == null)
-            return (List<Racun>) res.getResult();
-        else
-            throw res.getException();
     }
 }

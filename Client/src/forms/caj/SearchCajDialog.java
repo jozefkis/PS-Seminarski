@@ -63,6 +63,7 @@ public class SearchCajDialog extends javax.swing.JDialog
 
             }
         ));
+        tblCajevi.setFocusable(false);
         jScrollPane1.setViewportView(tblCajevi);
 
         tfName.addKeyListener(new java.awt.event.KeyAdapter()
@@ -154,6 +155,7 @@ public class SearchCajDialog extends javax.swing.JDialog
         if (index < 0)
         {
             JOptionPane.showMessageDialog(this, "Morate izabrati čaj.", "", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
 
         Caj caj = ((TableModelCaj) tblCajevi.getModel()).getCajevi().get(index);
@@ -166,6 +168,7 @@ public class SearchCajDialog extends javax.swing.JDialog
         if (index < 0)
         {
             JOptionPane.showMessageDialog(this, "Morate izabrati čaj.", "", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
 
         Caj kupac = ((TableModelCaj) tblCajevi.getModel()).getCajevi().get(index);

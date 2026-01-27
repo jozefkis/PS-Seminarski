@@ -5,11 +5,12 @@
 package forms.racun;
 
 import controller.ClientController;
-import dev.jozefkis.swingutils.decorators.AutoCompleteCBDecoratorUtils;
+import com.github.jozefkis.autocompletecb.AutoCompleteCBDecoratorUtils;
 import domain.Kupac;
 import domain.Racun;
 import domain.Travar;
 import java.util.List;
+import javax.swing.JOptionPane;
 import models.TableModelRacun;
 
 /**
@@ -74,6 +75,7 @@ public class SearchRacunDialog extends javax.swing.JDialog
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblRacuni.setFocusable(false);
         tblRacuni.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblRacuni);
 
@@ -96,6 +98,13 @@ public class SearchRacunDialog extends javax.swing.JDialog
         });
 
         btnDetails.setText("Detalji");
+        btnDetails.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnDetailsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -217,6 +226,24 @@ public class SearchRacunDialog extends javax.swing.JDialog
         }
     }//GEN-LAST:event_checkKupacActionPerformed
 
+    private void btnDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailsActionPerformed
+        // TODO add your handling code here:
+        int row = tblRacuni.getSelectedRow();
+        
+        if (row < 0)
+        {
+            JOptionPane.showMessageDialog(this,
+                    "Morate izabrati račun.",
+                    "Poruka",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        // Get selected Racun and show its details
+        Racun racun = ((TableModelRacun)tblRacuni.getModel()).getRacun(row);
+        new RacunDetailsDialog(this, true, racun).setVisible(true);
+    }//GEN-LAST:event_btnDetailsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDetails;
@@ -298,5 +325,10 @@ public class SearchRacunDialog extends javax.swing.JDialog
         {
             System.getLogger(SearchRacunDialog.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
+    }
+    
+    public void refreshTable()
+    {
+        btnSearchActionPerformed(null);
     }
 }
