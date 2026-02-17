@@ -175,12 +175,13 @@ public class SearchKupacDialog extends javax.swing.JDialog
         try
         {
             ClientController.getInstance().deleteKupac(kupac);
-            JOptionPane.showMessageDialog(this, "Kupac je uspešno izbrisan.", "Poruka", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Sistem je uspešno obrisao kupca.", "Poruka", JOptionPane.INFORMATION_MESSAGE);
             ((TableModelKupac) getTblKupci().getModel()).refresh();
         }
         catch (Exception ex)
         {
-            JOptionPane.showMessageDialog(this, "GRESKA\n" + ex.getMessage(), "Poruka", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Sistem ne može da obriše kupca.", "Greška", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_btnDeleteActionPerformed

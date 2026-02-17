@@ -446,14 +446,14 @@ public class MainForm extends javax.swing.JFrame
         try
         {
             Racun racun = ClientController.getInstance().addRacun(r);
-            JOptionPane.showMessageDialog(this, "Račun je uspešno zapamćen u sistem.",
+            JOptionPane.showMessageDialog(this, "Sistem je uspešno zapamtio račun.",
                     "Poruka", JOptionPane.INFORMATION_MESSAGE);
             clearInput();
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Greška!\n" + ex.getMessage(), "Greška", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Sistem ne može da zapamti račun!", "Greška", JOptionPane.ERROR_MESSAGE);
         }
 
 

@@ -356,13 +356,14 @@ public class RacunDetailsDialog extends javax.swing.JDialog
         {
             ogRacun.setDatum(LocalDateTime.now());
             ClientController.getInstance().updateRacun(ogRacun);
-            JOptionPane.showMessageDialog(this, "Izmene su uspešno sačuvane.", "Uspešno ažuriranje", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Sistem je uspešno zapamtio račun.", "Uspešno ažuriranje", JOptionPane.INFORMATION_MESSAGE);
             ((SearchRacunDialog) this.getParent()).refreshTable();
             this.dispose();
         }
         catch (Exception ex)
         {
             System.out.println("GREKSA: " + ex.getMessage() + "\n");
+            JOptionPane.showMessageDialog(this, "Sistem ne može da zapamti račun.", "Greška", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
 
         }
@@ -370,6 +371,7 @@ public class RacunDetailsDialog extends javax.swing.JDialog
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnCancelActionPerformed
     {//GEN-HEADEREND:event_btnCancelActionPerformed
+        ((SearchRacunDialog) this.getParent()).refreshTable();
         this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
@@ -390,6 +392,11 @@ public class RacunDetailsDialog extends javax.swing.JDialog
             model.removeStavka(toDelete);
         else
             model.deleteStavka(toDelete);
+        
+        ogRacun.setDatum(LocalDateTime.now());
+        DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        lblDate.setText(String.valueOf(ogRacun.getDatum().toLocalDate().format(customFormatter))
+                + ", " + ogRacun.getDatum().toLocalTime().truncatedTo(ChronoUnit.SECONDS));
     }//GEN-LAST:event_btnDeleteStavkaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -419,11 +426,10 @@ public class RacunDetailsDialog extends javax.swing.JDialog
 
     private void prepareView()
     {
-        // Load caj combo
         populateCajCombo();
 
         DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        // Set labels
+        
         lblID.setText(String.valueOf(ogRacun.getIdRacun()));
         lblDate.setText(String.valueOf(ogRacun.getDatum().toLocalDate().format(customFormatter)) + ", " + ogRacun.getDatum().toLocalTime());
         lblTravar.setText(ogRacun.getTravar().toString());

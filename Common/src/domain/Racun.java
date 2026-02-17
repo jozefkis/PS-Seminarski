@@ -312,7 +312,6 @@ public class Racun implements AbstractDomainObject
             stavka.setRb(1);
         else
             stavka.setRb(stavkeRacuna.get(stavkeRacuna.size() - 1).getRb() + 1);
-        
         stavka.setStatus("DB_INSERT");
         stavkeRacuna.add(stavka);
         ukupanIznos += stavka.getIznos();
@@ -344,6 +343,7 @@ public class Racun implements AbstractDomainObject
         }
 
         ukupanIznos = ukupanIznos - stariIznos + stavka.getIznos();
+        setDatum(LocalDateTime.now());
     }
 
     public void deleteStavka(StavkaRacuna stavka)

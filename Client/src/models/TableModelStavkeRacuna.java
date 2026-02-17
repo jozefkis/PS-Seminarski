@@ -177,6 +177,7 @@ public class TableModelStavkeRacuna extends AbstractTableModel
             // VALIDACIJA
             if (novaKolicina <= 0)
             {
+                // JOptionPane ovde
                 return;
             }
 

@@ -198,7 +198,7 @@ public class InsertUpdateCajDialog extends javax.swing.JDialog
             try
             {
                 ClientController.getInstance().updateCaj(caj);
-                JOptionPane.showMessageDialog(this, "Izmene su uspešno sačuvane.", "Poruka", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Sistem je uspešno zapamtio čaj.", "Poruka", JOptionPane.INFORMATION_MESSAGE);
                 
                 SearchCajDialog scd = (SearchCajDialog) getParent();
                 ((TableModelCaj) scd.getTblCajevi().getModel()).refresh();
@@ -208,7 +208,7 @@ public class InsertUpdateCajDialog extends javax.swing.JDialog
             catch (Exception ex)
             {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Greska!\n" + ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Sistem ne može da zapamti čaj.", "Greska", JOptionPane.ERROR_MESSAGE);
             }
         }
         else if (currentMode == FrmMode.ADD)
@@ -216,9 +216,7 @@ public class InsertUpdateCajDialog extends javax.swing.JDialog
             try
             {
                 Caj caj = ClientController.getInstance().addCaj(c);
-                int option = JOptionPane.showConfirmDialog(this, "Caj: " + caj.toString() + " je uspešno dodat sa ID-jem " + caj.getIdCaj() 
-                        + ".\n želite li da dodate još jedan? ", 
-                        "Poruka", JOptionPane.YES_NO_OPTION);
+                int option = JOptionPane.showConfirmDialog(this, "Sistem je uspešno zapamtio čaj" + ".\n želite li da dodate još jedan? ", "Poruka", JOptionPane.YES_NO_OPTION);
                 
                 MainForm mf = (MainForm) getParent();
                 mf.populateCajCombo();
@@ -231,7 +229,7 @@ public class InsertUpdateCajDialog extends javax.swing.JDialog
             catch (Exception ex)
             {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Greška!\n" + ex.getMessage(), "Greška", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Sistem ne može da zapamti čaj.", "Greška", JOptionPane.ERROR_MESSAGE);
             }
         }
 

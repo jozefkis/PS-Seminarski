@@ -183,7 +183,7 @@ public class InsertUpdateKupacDialog extends javax.swing.JDialog
             try
             {
                 ClientController.getInstance().updateKupac(kupac);
-                JOptionPane.showMessageDialog(this, "Izmene su uspešno sačuvane.", "Poruka", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Sistem je uspešno zapamtio kupca.", "Poruka", JOptionPane.INFORMATION_MESSAGE);
 
                 SearchKupacDialog pkd = (SearchKupacDialog) getParent();
                 ((TableModelKupac) pkd.getTblKupci().getModel()).refresh();
@@ -193,7 +193,7 @@ public class InsertUpdateKupacDialog extends javax.swing.JDialog
             catch (Exception ex)
             {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Greska!\n" + ex.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Sistem ne može da zapamti kupca.", "Greska", JOptionPane.ERROR_MESSAGE);
             }
         }
         else if (currentMode == FrmMode.ADD)
@@ -201,8 +201,7 @@ public class InsertUpdateKupacDialog extends javax.swing.JDialog
             try
             {
                 Kupac kupac = ClientController.getInstance().addKupac(k);
-                int option = JOptionPane.showConfirmDialog(this, "Kupac: " + kupac.toString() + " je uspešno dodat sa ID-jem " + kupac.getIdKupac()
-                        + ".\nŽelite li da dodate još jednog kupca?",
+                int option = JOptionPane.showConfirmDialog(this, "Sistem je uspešno zapamtio kupca." + "\nŽelite li da dodate još jednog kupca?",
                         "Poruka", JOptionPane.YES_NO_OPTION);
 
                 MainForm mf = (MainForm) getParent();
@@ -220,7 +219,7 @@ public class InsertUpdateKupacDialog extends javax.swing.JDialog
             catch (Exception ex)
             {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Greška!\n" + ex.getMessage(), "Greška", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Sistem ne može da zapamti kupca!\n" + ex.getMessage(), "Greška", JOptionPane.ERROR_MESSAGE);
             }
         }
 

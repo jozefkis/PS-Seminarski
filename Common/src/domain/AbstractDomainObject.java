@@ -29,10 +29,10 @@ public interface AbstractDomainObject extends Serializable
     public String getFilterConditionPlaceholder();
     public String getExistenceConditionPlaceholder();
     
-    public void prepareInsert(PreparedStatement ps) throws SQLException;
-    public void prepareUpdate(PreparedStatement ps) throws SQLException;
-    public void prepareCondition(PreparedStatement ps) throws SQLException;
-    public void prepareSelect(PreparedStatement ps) throws SQLException;
-    public void prepareFilter(PreparedStatement ps) throws SQLException;
+    void prepareInsert(PreparedStatement ps) throws SQLException;
+    void prepareUpdate(PreparedStatement ps) throws SQLException;
+    void prepareCondition(PreparedStatement ps) throws SQLException;
+    void prepareSelect(PreparedStatement ps) throws SQLException;
+    void prepareFilter(PreparedStatement ps) throws SQLException;
     public void prepareExistenceCondition(PreparedStatement ps) throws SQLException;
 }

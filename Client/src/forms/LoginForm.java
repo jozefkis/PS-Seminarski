@@ -11,11 +11,9 @@ import domain.Travar;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import javax.swing.plaf.BorderUIResource;
 
 /**
  *
@@ -176,13 +174,14 @@ public class LoginForm extends javax.swing.JFrame
             System.out.println(t.getUsername() + " " + t.getPassword());
 
             t = ClientController.getInstance().login(t);
+            JOptionPane.showMessageDialog(this, "Korisničko ime i šifra su ispravni.", "Login successful", JOptionPane.INFORMATION_MESSAGE);
             new MainForm(t);
             this.dispose();
 
         }
         catch (Exception ex)
         {
-            JOptionPane.showMessageDialog(this, "Login unsucessful!\n" + ex.getMessage(), "Login error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Login error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 

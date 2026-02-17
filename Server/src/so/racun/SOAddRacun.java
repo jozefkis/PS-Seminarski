@@ -44,7 +44,7 @@ public class SOAddRacun extends AbstractSO
         
         for (StavkaRacuna sr: racun.getStavkeRacuna())
         {
-            sr.setRacun(racun);
+            sr.setRacun(racun); // visak?
             DBBroker.getInstance().insert(sr, connection);
         }
     }

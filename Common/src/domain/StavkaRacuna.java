@@ -98,7 +98,33 @@ public class StavkaRacuna implements AbstractDomainObject
     @Override
     public List<AbstractDomainObject> getList(ResultSet rs) throws SQLException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<AbstractDomainObject> lista = new ArrayList<>();
+        
+        while (rs.next())
+        {
+            Travar t = new Travar(rs.getLong("idTravar"),rs.getString("t.ime"), 
+                    rs.getString("t.prezime"), rs.getString("t.telefon"),
+                    rs.getString("t.korisnickoIme"), rs.getString("t.sifra"));
+            
+            Mesto m = new Mesto(rs.getLong("m.idMesto"),rs.getString("m.naziv"));
+            
+            Kupac k = new Kupac(rs.getLong("idKupac"), rs.getString("k.ime"), rs.getString("k.prezime"), 
+                    rs.getString("k.telefon"), m);
+            
+            Racun r = new Racun(rs.getLong("idRacun"), rs.getObject("r.datum", LocalDateTime.class), 
+                    rs.getDouble("r.ukupanIznos"), t, k, null);
+            
+            Caj c = new Caj(rs.getLong("idCaj"),rs.getString("c.naziv"), 
+                    rs.getDouble("c.cena"), rs.getString("c.korisnickoUputstvo"),
+                    rs.getString("c.opis"));
+            
+            StavkaRacuna sr = new StavkaRacuna(r, rs.getInt("rb"), rs.getInt("kolicina"),
+                    rs.getDouble("sr.cena"), rs.getDouble("sr.iznos"), c);
+            
+            lista.add(sr);
+        }
+        
+        return lista;
     }
 
     @Override

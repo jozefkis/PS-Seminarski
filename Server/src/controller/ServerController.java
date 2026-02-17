@@ -9,7 +9,6 @@ import domain.Caj;
 import domain.Kupac;
 import domain.Mesto;
 import domain.Racun;
-import domain.StavkaRacuna;
 import domain.Travar;
 import java.util.List;
 import so.kupac.SOGetAllKupac;
